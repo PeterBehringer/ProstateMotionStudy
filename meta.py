@@ -75,19 +75,26 @@ def getMovingImageID(IntraDir,movingImageID):
       print 'there is no path like: '+str(IntraDir)
     return movingImageID
 
-def getListOfCaseIDs(numberOfCases,listOfCaseIDs):
+def getListOfCaseIDs(numberOfCases):
+
+  listOfCaseIDs = []
 
   for case in range(numberOfCases):
     if case < 10:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case00'+str(case)+'/IntraopImages/'
         print caseDir
+        if os.path.isdir(str(caseDir)):
+             listOfCaseIDs.append(case)
     elif 9 < case < 100:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case0'+str(case)+'/IntraopImages/'
+        print caseDir
+        if os.path.isdir(str(caseDir)):
+             listOfCaseIDs.append(case)
     elif 99 < case:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case'+str(case)+'/IntraopImages/'
-
-    if os.path.isdir(str(caseDir)):
-      listOfCaseIDs.append(case)
+        print caseDir
+        if os.path.isdir(str(caseDir)):
+             listOfCaseIDs.append(case)
 
   return listOfCaseIDs
 
@@ -164,17 +171,32 @@ def transformFiducials(needleImageIds,ResDir,case):
           os.makedirs(centroidDir+'/Case'+str(case)+'/')
       except:
           pass
-      resampled = centroidDir+'/Case'+str(case)+'/'+nidStr+'-BSplineRegistered-centroid.fcsv'
-      fidList = IntraDir+'/centroid.fcsv'
-      # resampled = ResDir+'/'+nidStr+'-BSplineRegistered-targets.fcsv'
-      # fidList = IntraDir+'/Case'+case+'_CoverProstate-registered_targets.fcsv'
 
-      #if not IsBSplineTfmValid(bsplineTfm):
-      #  print 'BSpline transform is not valid! Will skip needle image ',nid
-      #  continue
-      transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
-      print ('transformed fiducials!')
+      fid1='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_apex.fcsv'
+      fid2='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_base.fcsv'
+      fid3='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv'
+      fid4='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_inferior.fcsv'
+      fid5='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_left.fcsv'
+      fid6='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_right.fcsv'
+      fid7='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_superior.fcsv'
 
+      listOfTargetsToBeTransformed = ['centroid_apex',
+                                      'centroid_base',
+                                      'centroid_label',
+                                      'midgland_inferior',
+                                      'midgland_left',
+                                      'midgland_right',
+                                      'midgland_superior']
+
+      for i in range(0,len(listOfTargetsToBeTransformed)):
+
+          resampled = centroidDir+'/Case'+str(case)+'/'+str(nidStr)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+          fidList = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+
+          transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
+          print ('transformed fiducials!')
+          i+=1
+          print i
 def createMotionSummary(case,ResDir,needleImageIDs):
     summary=[]
     cmd=('touch '+ResDir+'/summary_glandMotion.txt')
@@ -292,7 +314,6 @@ def ReadInitialTime(case,nid):
   f=open(file,'r')
   return tm2sec(f.read())
 
-
 def ReadNeedleTime(case,nid):
   file=getCaseDir(case)+str(nid)+'.timestamp'
   print 'file = '+str(file)
@@ -312,21 +333,21 @@ CaseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298
 RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/'
 TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks'
 latestRigidTfm = '/Users/peterbehringer/MyStudies/InitialTransforms/Identity.h5'
-centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/centroids'
+centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed'
 
-numberOfCases = 290
+numberOfCases = 300
 listOfCaseIDs = []
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,275]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,275,278,280,281,282,285,286,287]
 
 # get list of cases
-listOfCaseIDs = getListOfCaseIDs(numberOfCases,listOfCaseIDs)
+listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
 # ignore cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-print listOfCaseIDs
+#print listOfCaseIDs
 
 # testing:
-listOfCaseIDs = [16]
+listOfCaseIDs = [12,13,14,15,16]
 
 createFolders()
 
@@ -349,7 +370,7 @@ for case in listOfCaseIDs:
   needleImageIds = getNeedleImageIDs(IntraDir,needleImageIds)
   print needleImageIds
 
-  """
+
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   print ('about to run : '+cmd)
@@ -361,12 +382,6 @@ for case in listOfCaseIDs:
   print ('about to run : '+cmd)
   os.system(cmd)
 
-  # 3. makeCentroid (CoverProstate)
-  movingMaskID=[]
-  movingMask=getMovingImageID(IntraDir,movingMaskID)
-  mask = IntraDir+str(movingMask[0])+'-label.nrrd'
-  result = IntraDir+'/centroid.fcsv'
-  createCentroid(mask,result)
 
   # 4. transformCentroids
   transformFiducials(needleImageIds,resDir,case)
@@ -374,8 +389,7 @@ for case in listOfCaseIDs:
 
   # 5. createMotionSummary
   createMotionSummary(case,resDir,needleImageIds)
-
-
+  """
 
   """
   # 3. MakeConfig.py
@@ -392,17 +406,9 @@ for case in listOfCaseIDs:
   """
 
 
-
 """
 cmd = ('python createOverallFiducialSummary.py '+str(lowercaseNumber)+' '+str(upperCaseNumber))
 print ('about to run : '+cmd)
 #os.system(cmd)
 
-cmd = ('python createOverallDICE_CH-TG.py '+str(lowercaseNumber)+' '+str(upperCaseNumber))
-print ('about to run : '+cmd)
-os.system(cmd)
-
-cmd = ('python PlotExecutionTimeSummary.py '+str(lowercaseNumber)+' '+str(upperCaseNumber))
-print ('about to run : '+cmd)
-#os.system(cmd)
 """

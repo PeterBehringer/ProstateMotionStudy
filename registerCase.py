@@ -161,9 +161,13 @@ latestMovingMask = movingMask
 # try to read the registration log
 
 if not os.path.isfile(str(RegDir+case+'_registration_times.log')):
-  cmd = ('touch '+ str(RegDir+case+'_registration_times.log'))
-  print cmd
-  os.system(cmd)
+    try:
+      os.makedirs(str(RegDir+case))
+    except:
+      pass
+    cmd = ('touch '+ str(RegDir+case+'_registration_times.log'))
+    print cmd
+    os.system(cmd)
 
 regTimesLog = open(RegDir+case+'_registration_times.log','a+')
 
