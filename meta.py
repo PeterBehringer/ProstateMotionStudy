@@ -25,7 +25,7 @@ def createFolders():
     pass
 
   try:
-    os.mkdir(ResDir)
+    os.mkdir(resDir)
   except:
     pass
 
@@ -62,12 +62,13 @@ def getTransformDir(case):
 
     return transformDir
 
-def getMovingImageID(IntraDir,movingImageID):
+def getMovingImageID(IntraDir):
+    movingImageID = []
     # returns list of Image ID's for case with dir intradir
     if os.path.isdir(IntraDir):
       listDir = os.listdir(IntraDir)
-      print 'HERE'
-      print listDir
+      #print 'HERE'
+      #print listDir
       for i in range(len(listDir)):
           if 'CoverProstate' in listDir[i]:
               movingImageID.append(int(string.split(listDir[i],'-')[0]))
@@ -120,6 +121,17 @@ def getResDir(case):
 
     return ResDir
 
+def getMotionDir(case):
+
+    if case < 10:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case00'+str(case)
+    elif 9 < case < 100:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case0'+str(case)
+    elif 99 < case:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case'+str(case)
+
+    return motionDir
+
 def createCentroid(mask,result):
 
   import SimpleITK as sitk
@@ -139,7 +151,7 @@ def createCentroid(mask,result):
 
 def transformFiducialsBRAINS(fidIn,tfmIn,fidOut):
   CMD='/Users/peterbehringer/MyProjects/BRAINSTools/BRAINSTools-build/bin/BRAINSConstellationLandmarksTransform -i '+fidIn+' -t '+tfmIn+' -o '+fidOut
-  print 'about to run : '+CMD
+  #print 'about to run : '+CMD
 
   ret = os.system(CMD)
   if ret:
@@ -155,11 +167,11 @@ def transformFiducials(needleImageIds,ResDir,case):
       # check if there is a matching TG
       transformDir = getTransformDir(case)+'/IntraopImages'
       bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
-      print ('bsplineTfm'+str(bsplineTfm))
+      #print ('bsplineTfm'+str(bsplineTfm))
       if not os.path.isfile(bsplineTfm):
-        print ('went here')
+        #print ('went here')
         bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt1.h5'
-        print ('bsplineTfm '+str(bsplineTfm))
+        #print ('bsplineTfm '+str(bsplineTfm))
       if not os.path.isfile(bsplineTfm):
         print 'Failed to find ANY transform!'
         exit()
@@ -194,90 +206,121 @@ def transformFiducials(needleImageIds,ResDir,case):
           fidList = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
 
           transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
-          print ('transformed fiducials!')
+
           i+=1
-          print i
-def createMotionSummary(case,ResDir,needleImageIDs):
-    summary=[]
-    cmd=('touch '+ResDir+'/summary_glandMotion.txt')
-    os.system(cmd)
-    f = open(ResDir+'/summary_glandMotion.txt', 'w')
-    f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
-    for nid in needleImageIds:
 
-      nidTime = ReadNeedleTime(case,nid)
-      initialTime = ReadInitialTime(case,nid)
+    print ('transformed fiducials for case '+str(case) +'!')
 
-      print nidTime
-      # print 'Needle time: ',nidTime
+def createMotionSummary(case,motionDir,centroidDir,needleImageIDs):
 
-      # resampled = ResDir+'/'+str(nid)+'-BSplineRegistered-targets.fcsv'
-      """
-      resampled = ResDir+'/'+str(nid)+'-BSplineRegistered-centroid.fcsv'
-      print ('resampled = '+str(resampled))
-      nidPosition = ReadFiducial(resampled)
-      print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
-      print 'nidPosition[0]'+str(nidPosition[0])
-      print 'initialPosition[0]'+str(initialPosition[0])
+    try:
+      os.makedirs(motionDir)
+    except:
+      pass
 
-      summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-      f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
-      # BFResample(reference=fixedImage,moving=movingImage,tfm=bsplineTfm,output=resampled)
-      """
-    f.write("\n"+"_____________________________________")
+    listOfTargetsToBeTransformed = ['centroid_apex',
+                                    'centroid_base',
+                                    'centroid_label',
+                                    'midgland_inferior',
+                                    'midgland_left',
+                                    'midgland_right',
+                                    'midgland_superior']
 
-    print summary
+    for i in range(0,len(listOfTargetsToBeTransformed)):
+        #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
+        dir = motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt'
+        cmd='touch '+ str(dir)
+        print dir
+        os.system(cmd)
 
-    avgX = 0
-    avgY = 0
-    avgZ = 0
+        f = open(dir, 'w')
+        f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
+        summary=[]
+        for nid in needleImageIds:
 
-    for i in range(0,len(needleImageIds)):
-      avgX =avgX+summary[i][3]
-      avgY =avgY+summary[i][4]
-      avgZ =avgZ+summary[i][5]
 
-    avgX=avgX/len(needleImageIds)
-    avgY=avgY/len(needleImageIds)
-    avgZ=avgZ/len(needleImageIds)
+          nidTime = ReadNeedleTime(case,nid)
+          initialTime = ReadInitialTime(case)
 
-    print avgX
-    print avgY
-    print avgZ
+          #print nidTime
 
-    f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+          resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed/Case'+str(case)+\
+                      '/'+str(nid)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+
+          initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
+
+          nidPosition = ReadFiducial(resampled)
+
+          print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
+          #print 'nidPosition[0]'+str(nidPosition[0])
+          #print 'initialPosition[0]'+str(initialPosition[0])
+
+          summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
+          f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
+
+
+        f.write("\n"+"_____________________________________")
+        #print '_______'
+        #print summary
+
+        avgX = 0
+        avgY = 0
+        avgZ = 0
+
+        for i in range(0,len(needleImageIds)):
+          avgX =avgX+summary[i][3]
+          avgY =avgY+summary[i][4]
+          avgZ =avgZ+summary[i][5]
+
+        avgX=avgX/len(needleImageIds)
+        avgY=avgY/len(needleImageIds)
+        avgZ=avgZ/len(needleImageIds)
+
+        #print avgX
+        #print avgY
+        #print avgZ
+
+        f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+
+def ReadInitialFiducial(dir):
+
+    f = open(dir, 'r')
+    l = f.read()
+    #print l
+    i = l.split(',')
+    #print i
+    #print 'i[1]'
+    #print [float(i[1])]
+    #print 'i[2]'
+    #print [float(i[2])]
+    #print 'i[3]'
+    #print [float(i[3])]
+    return [float(i[1]),float(i[2]),float(i[3])]
 
 def ReadFiducial(fname):
 
-  if 'CoverProstate' in fname:
-    # andriys code
-    f = open(fname, 'r')
-    l = f.read()
-    i = l.split(',')
-    print 'i[1]'
-    print [float(i[1])]
-    print 'i[2]'
-    print [float(i[2])]
-    print 'i[3]'
-    print [float(i[3])]
-    return [float(i[1]),float(i[2]),float(i[3])]
 
-  else:
-    print 'fname',fname
+    #print 'fname',fname
     f = open(fname, 'r')
     # ignore line 1-8
     l = f.readlines()[8:]
-    print 'l = ',str(l)
+    #print 'l = ',str(l)
     number_of_fids=len(l)
-    print ('amount of fids : '+str(number_of_fids))
+    #print ('amount of fids : '+str(number_of_fids))
     import string
     splitted=string.split(str(l),',')
+    #print 'splitted = '+str(splitted)
+    #print splitted[1]
+    #print splitted[2]
+    #print splitted[3]
+    """
     chunks=[splitted[x:x+6] for x in xrange(0, number_of_fids*6, 6)]
     fiducials=[]
     for i in range(0,1):
         # print ('fiducialPoint = '+str(chunks[i][1:4]))
         fiducials.append(chunks[i][1:4])
-    return [float(fiducials[0][0]),float(fiducials[0][1]),float(fiducials[0][2])]
+    """
+    return [float(splitted[1]),float(splitted[2]),float(splitted[3])]
 
 def tm2sec(tm):
   try:
@@ -301,26 +344,60 @@ def tm2sec(tm):
 
   return sec
 
-def ReadInitialTime(case,nid):
-
-
-  dir=getCaseDir(case)+str(nid)+'.timestamp' # stopped here
-  subdir = os.listdir(dir)[0]
-  print ('subdir = '+subdir)
-  # kick out .DS_Store
-  if "Store" in subdir:
-    subdir=os.listdir(dir)[1]
-  file=dir+'/'+subdir+'/timestamp'
+def ReadInitialTime(case):
+  movingImageID = getMovingImageID(caseDir)
+  file = IntraDir+str(movingImageID[0])+'.timestamp'
   f=open(file,'r')
   return tm2sec(f.read())
 
 def ReadNeedleTime(case,nid):
   file=getCaseDir(case)+str(nid)+'.timestamp'
-  print 'file = '+str(file)
   f=open(file,'r')
   return tm2sec(f.read())
 
-#
+def createOverallFiducialSummary():
+
+
+    summary=[]
+    for case in listOfCaseIDs:
+
+        motionDir=('/Users/peterbehringer/MyStudies/Verification/Case'+str(case)+'/summary_glandMotion.txt')
+        print motionDir
+        f=open(pathToFile,'r')
+        for line in f:
+          last=line
+        splitted=last.split(',')
+        summary.append(splitted)
+
+    print summary
+
+    avgX=0
+    avgY=0
+    avgZ=0
+
+    for i in range(0,len(summary)):
+      avgX =avgX+float(summary[i][1])
+      avgY =avgY+float(summary[i][2])
+      print ('avgY = '+str(avgY))
+      print ('case = '+str(i))
+      avgZ =avgZ+float(summary[i][3])
+
+    avgX=avgX/len(summary)
+    avgY=avgY/len(summary)
+    avgZ=avgZ/len(summary)
+
+    print avgX
+    print avgY
+    print avgZ
+
+    cmd=('touch /Users/peterbehringer/MyStudies/Verification/OverallSummary_glandMotion.txt')
+    print ('about to run '+cmd)
+    os.system(cmd)
+    f = open('/Users/peterbehringer/MyStudies/Verification/OverallSummary_glandMotion.txt', 'w')
+    f.write('Overall Summary created, showing [lastcase,averageMovement_x, averageMovement_y, averageMovement_z ')
+    f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+
+
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"
 
@@ -337,7 +414,7 @@ centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_
 
 numberOfCases = 300
 listOfCaseIDs = []
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,275,278,280,281,282,285,286,287]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
 
 # get list of cases
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
@@ -347,7 +424,7 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 #print listOfCaseIDs
 
 # testing:
-listOfCaseIDs = [12,13,14,15,16]
+#listOfCaseIDs = [10,11,12,13]
 
 createFolders()
 
@@ -365,11 +442,13 @@ for case in listOfCaseIDs:
   tempDir=getTempDir(case)
   resDir = getResDir(case)
   IntraDir = caseDir
+  motionDir = getMotionDir(case)
 
   needleImageIds = []
   needleImageIds = getNeedleImageIDs(IntraDir,needleImageIds)
-  print needleImageIds
 
+
+  """
 
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
@@ -387,28 +466,19 @@ for case in listOfCaseIDs:
   transformFiducials(needleImageIds,resDir,case)
   """
 
+
   # 5. createMotionSummary
-  createMotionSummary(case,resDir,needleImageIds)
-  """
+  #createMotionSummary(case,motionDir,centroidDir,needleImageIds)
+
+
 
   """
   # 3. MakeConfig.py
   cmd = ('python MakeConfig.py '+str(case))
   print ('about to run : '+cmd)
   #os.system(cmd)
-
-
-
-  print tempDir
-  cmd = ('python makeFiducialSummaryTable.py '+str(case) +' '+ str(IntraDir)+' ' + str(RegDir)+' ' + str(resDir)+' ' + str(tempDir))
-  print ('about to run : '+cmd)
-  os.system(cmd)
   """
 
 
-"""
-cmd = ('python createOverallFiducialSummary.py '+str(lowercaseNumber)+' '+str(upperCaseNumber))
-print ('about to run : '+cmd)
-#os.system(cmd)
 
-"""
+createOverallFiducialSummary(listOfCaseIDs,motionDir)
