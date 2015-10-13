@@ -63,14 +63,18 @@ def getNeedleImageIDs(IntraDir):
 print 'list of cases with no segmentation: '
 print '____________________________________'
 count = 0
+count2 = 0
 
 listOfCaseIDs = getListOfCaseIDs(300)
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,275,278,280,281,282,285,286,287]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
-
+print listOfCaseIDs
 
 for case in listOfCaseIDs:
+
+
+    #print 'case = '+str(case)
     tag = 0
     caseDir = getCaseDir(case)
     nids =  getNeedleImageIDs(caseDir)
@@ -93,16 +97,28 @@ for case in listOfCaseIDs:
     """
     ####
 
+
+    #### COUNT !
+
+    for needleImgs in nids:
+        count2 += 1
+        count2
+
+    ####
+
+
     ####
     # CHECK FOR TG
 
     firstNeedleImage = nids[0]
     if os.path.exists(caseDir+str(firstNeedleImage)+'-TG.nrrd'):
         print "case "+str(case)+' uses a TG'
+
     ####
 
 
     ####
+    """
     # CHECK IF TRANSFORMS ARE EXISTING FOR EACH NEEDLE CONFIRMATION IMAGE
     transDir = getTransformDir(case)
     for i in range(0,len(nids)):
@@ -118,9 +134,27 @@ for case in listOfCaseIDs:
          print '____________________'
          print "\n"
          tag = 0
+    """
     ####
+
+    ####
+    # CHECK IF CONFIGS WERE CREATED
+    """
+    configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
+    cfFileName = configDir+'/Case'+str(case)+'_VisAIRe.ini'
+
+    if not os.path.exists(cfFileName):
+        print 'config file is missing for case '+str(case)
+
+    """
+
+
 
 """
 print '____________________________________'
 print ' no segmentation in '+str(count)+' cases'
+
 """
+print '____________________________________'
+print ' there are '+str(count2)+' needle images in total'
+

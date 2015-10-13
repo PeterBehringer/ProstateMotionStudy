@@ -1,7 +1,8 @@
 import os, argparse, string, re, sys, glob
 from time import time
 
-def getNeedleImageIDs(IntraDir,needleImageIDs):
+def getNeedleImageIDs(IntraDir):
+    needleImageIds = []
     # returns list of Image ID's for case with dir intradir
     if os.path.isdir(IntraDir):
       listDir = os.listdir(IntraDir)
@@ -299,7 +300,6 @@ def ReadInitialFiducial(dir):
 
 def ReadFiducial(fname):
 
-
     #print 'fname',fname
     f = open(fname, 'r')
     # ignore line 1-8
@@ -355,19 +355,39 @@ def ReadNeedleTime(case,nid):
   f=open(file,'r')
   return tm2sec(f.read())
 
-def createOverallFiducialSummary():
-
+def createOverallFiducialSummary(listOfCaseIDs,motionDir):
 
     summary=[]
     for case in listOfCaseIDs:
 
-        motionDir=('/Users/peterbehringer/MyStudies/Verification/Case'+str(case)+'/summary_glandMotion.txt')
-        print motionDir
-        f=open(pathToFile,'r')
+        listOfTargetsToBeTransformed = ['centroid_apex',
+                                        'centroid_base',
+                                        'centroid_label',
+                                        'midgland_inferior',
+                                        'midgland_left',
+                                        'midgland_right',
+                                        'midgland_superior']
+
+
+        for target in listOfTargetsToBeTransformed:
+            print target
+            fileDir = motionDir+'/motionsummary_' + target +'.txt'
+            print fileDir
+
+
+
+        f=open(fileDir,'r')
+        # ignore line 1-8
+        l = f.readlines()[2:len(fileDir)-2]
+        print l
         for line in f:
           last=line
         splitted=last.split(',')
-        summary.append(splitted)
+        print splitted
+
+    """
+
+    summary.append(splitted)
 
     print summary
 
@@ -396,7 +416,86 @@ def createOverallFiducialSummary():
     f = open('/Users/peterbehringer/MyStudies/Verification/OverallSummary_glandMotion.txt', 'w')
     f.write('Overall Summary created, showing [lastcase,averageMovement_x, averageMovement_y, averageMovement_z ')
     f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+    """
 
+def makeConfig(case,caseDir,needleImageIDs,RegDir,ResDir):
+
+    import os, argparse, string, re, sys, glob
+    import ConfigParser as conf
+    from time import time
+
+
+    # delete : SegDir='/Users/peterbehringer/MyStudies/Segmentations-Cases11-50/Case'+case+'-ManualSegmentations'
+
+
+    cf = conf.SafeConfigParser()
+    cf.optionxform = str
+    cfFileName = configDir+'/Case'+str(case)+'_VisAIRe.ini'
+
+    try:
+      cmd = ('touch '+str(cfFileName))
+      os.system(cmd)
+    except:
+      pass
+
+    cfFile = open(cfFileName,'w')
+
+    # moving image/mask will always be the same
+    movingImageID = getMovingImageID(caseDir)
+    movingImage = caseDir+str(movingImageID[0])+'-CoverProstate.nrrd'
+    segImage = caseDir+str(movingImageID[0])+'-label.nrrd'
+
+
+    cf.add_section('MovingData')
+    cf.set('MovingData','ImagesPath',IntraDir)
+    #cf.set('MovingData','SegmentationsPath',SegDir)
+    cf.set('MovingData','Image',os.path.abspath(movingImage))
+    cf.set('MovingData','Segmentation',os.path.abspath(segImage))
+
+    cf.add_section('FixedData')
+    cf.set('FixedData','ImagesPath',IntraDir)
+
+    for nid in needleImageIds:
+      nidStr=str(nid)
+      cf.set('FixedData','Image'+nidStr,os.path.join(os.path.abspath(IntraDir),nidStr+'-Needle.nrrd'))
+
+    cf.add_section('RegisteredData')
+    cf.set('RegisteredData','ImagesPath',ResDir)
+    cf.set('RegisteredData','TransformsDir',RegDir)
+
+    for nid in needleImageIds:
+      nidStr=str(nid)
+      cf.set('RegisteredData','Image'+nidStr,os.path.join(os.path.abspath(ResDir),nidStr+'-BSpline_resampled.nrrd'))
+      # TODO: add transformations
+      tfmFile1 = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt1.h5'
+      tfmFile2 = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
+
+      print tfmFile1
+      print tfmFile2
+
+      if os.path.exists(tfmFile1):
+        cf.set('RegisteredData','Transform'+nidStr,os.path.abspath(tfmFile1))
+      elif os.path.exists(tfmFile2):
+        cf.set('RegisteredData','Transform'+nidStr,os.path.abspath(tfmFile2))
+      else:
+        assert False
+      # add segmentations
+
+    # assessment questions; format:
+    #   comment; type=[binary,number];
+    cf.add_section('Questions')
+    cf.set('Questions','Question1','Did registration improve alignment?;binary;')
+    cf.set('Questions','Question2','Is registered image of diagnostic quality?;binary;')
+    cf.set('Questions','Question3','Quantitative assessment of mis-registration (if available);numeric;')
+
+
+    cf.add_section('Info')
+    cf.set('Info','CaseName','BxCase'+str(case))
+
+    cf.write(cfFile)
+    cfFile.close()
+
+    print 'Config file saved as ',cfFileName
 
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"
@@ -411,6 +510,7 @@ RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/'
 TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks'
 latestRigidTfm = '/Users/peterbehringer/MyStudies/InitialTransforms/Identity.h5'
 centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed'
+configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
 
 numberOfCases = 300
 listOfCaseIDs = []
@@ -424,7 +524,7 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 #print listOfCaseIDs
 
 # testing:
-#listOfCaseIDs = [10,11,12,13]
+#listOfCaseIDs = [268]
 
 createFolders()
 
@@ -445,40 +545,28 @@ for case in listOfCaseIDs:
   motionDir = getMotionDir(case)
 
   needleImageIds = []
-  needleImageIds = getNeedleImageIDs(IntraDir,needleImageIds)
-
-
-  """
+  needleImageIds = getNeedleImageIDs(IntraDir)
 
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   print ('about to run : '+cmd)
   os.system(cmd)
 
-
   # 2. resampleCase.py
   cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
   print ('about to run : '+cmd)
   os.system(cmd)
 
-
   # 4. transformCentroids
   transformFiducials(needleImageIds,resDir,case)
-  """
-
 
   # 5. createMotionSummary
-  #createMotionSummary(case,motionDir,centroidDir,needleImageIds)
+  createMotionSummary(case,motionDir,centroidDir,needleImageIds)
+
+  # 6. create Config for verification and snapshots
+  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
 
 
-  """
-  # 3. MakeConfig.py
-  cmd = ('python MakeConfig.py '+str(case))
-  print ('about to run : '+cmd)
-  #os.system(cmd)
-  """
 
-
-
-createOverallFiducialSummary(listOfCaseIDs,motionDir)
+# createOverallFiducialSummary(listOfCaseIDs,motionDir)
