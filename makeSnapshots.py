@@ -52,6 +52,10 @@ alreadyGotThose = range(0,270,1)
 listOfCaseIDs=list(set(listOfCaseIDs) - set(alreadyGotThose))
 listOfCaseIDs = sorted(listOfCaseIDs)
 
+listOfCaseIDs = [23,40,42,43,46,47,66,74,80,83,86,108,112,115,117,124,125,
+                 127,134,139,146,151,160,164,167,168,172,177,185,186,189,
+                 202,219,223,227,234,238,242,253,262,270,289,295,]
+
 print listOfCaseIDs
 
 #listOfCaseIDs = [268,270,271]
@@ -75,7 +79,7 @@ def getNeedleImageIDs(IntraDir):
 # execfile ('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/scripts/makeSnapshots.py')
 # to launch it. Also, make sure that VisAIRe is installed as a module and open!
 
-"""
+
 for case in listOfCaseIDs:
 
     print 'NEW CASE ******************************************************'
@@ -92,8 +96,6 @@ for case in listOfCaseIDs:
 
     # hit "make snapshots"
     slicer.modules.VisAIReWidget.onMakeSnapshots()
-"""
-
 
 
 import sys, glob, string, os, re

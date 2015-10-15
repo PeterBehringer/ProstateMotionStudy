@@ -212,7 +212,7 @@ def transformFiducials(needleImageIds,ResDir,case):
 
     print ('transformed fiducials for case '+str(case) +'!')
 
-def createMotionSummary(case,motionDir,centroidDir,needleImageIDs):
+def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns):
 
     try:
       os.makedirs(motionDir)
@@ -227,18 +227,31 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs):
                                     'midgland_right',
                                     'midgland_superior']
 
+
+    """
+    for nid in needleImageIds:
+
+        nidTime = ReadNeedleTime(case,nid)
+        initialTime = ReadInitialTime(case)
+        passedTime = str(nidTime - initialTime)
+
+        #print ReadInitialTime(case)
+        #print nidTime
+        #print passedTime
+
+    """
+
     for i in range(0,len(listOfTargetsToBeTransformed)):
         #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
         dir = motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt'
         cmd='touch '+ str(dir)
-        print dir
+        #print dir
         os.system(cmd)
 
         f = open(dir, 'w')
         f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
         summary=[]
         for nid in needleImageIds:
-
 
           nidTime = ReadNeedleTime(case,nid)
           initialTime = ReadInitialTime(case)
@@ -252,12 +265,21 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs):
 
           nidPosition = ReadFiducial(resampled)
 
-          print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
+          #print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
           #print 'nidPosition[0]'+str(nidPosition[0])
           #print 'initialPosition[0]'+str(initialPosition[0])
 
           summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
           f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
+
+          x = abs(nidPosition[0]-initialPosition[0])
+          y = abs(nidPosition[1]-initialPosition[1])
+          z = abs(nidPosition[2]-initialPosition[2])
+
+          appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
+
+          #print nidTime-initialTime
+          print
 
 
         f.write("\n"+"_____________________________________")
@@ -282,6 +304,169 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs):
         #print avgZ
 
         f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+
+def getNameOfList(index):
+    
+    if index == 0:
+        return 'excel_column_APEX_x'
+    if index == 1:
+        return 'excel_column_APEX_y'
+    if index == 2:
+        return 'excel_column_APEX_z'
+    if index == 3:
+        return 'excel_column_BASE_x'
+    if index == 4:
+        return 'excel_column_BASE_y'
+    if index == 5:
+        return 'excel_column_BASE_z'
+    if index == 6:
+        return 'excel_column_LABEL_x'
+    if index == 7:
+        return 'excel_column_LABEL_y'
+    if index == 8:
+        return 'excel_column_LABEL_z'   
+    if index == 9:
+        return 'excel_column_INFERIOR_x'
+    if index == 10:
+        return 'excel_column_INFERIOR_y'
+    if index == 11:
+        return 'excel_column_INFERIOR_z'
+    if index == 12:
+        return 'excel_column_LEFT_x'
+    if index == 13:
+        return 'excel_column_LEFT_y'
+    if index == 14:
+        return 'excel_column_LEFT_z'
+    if index == 15:
+        return 'excel_column_RIGHT_x'
+    if index == 16:
+        return 'excel_column_RIGHT_y'
+    if index == 17:
+        return 'excel_column_RIGHT_z'
+    if index == 18:
+        return 'excel_column_SUPERIOR_x'
+    if index == 19:
+        return 'excel_column_SUPERIOR_y'
+    if index == 20:
+        return 'excel_column_SUPERIOR_z'
+    
+def appendToExcelColumn(targetToBeTransformed,x,y,z,listOfColumns):
+
+        excel_column_APEX_x = listOfColumns[0]
+        excel_column_APEX_y = listOfColumns[1]
+        excel_column_APEX_z = listOfColumns[2]
+        excel_column_BASE_x = listOfColumns[3]
+        excel_column_BASE_y = listOfColumns[4]
+        excel_column_BASE_z = listOfColumns[5]
+        excel_column_LABEL_x = listOfColumns[6]
+        excel_column_LABEL_y = listOfColumns[7]
+        excel_column_LABEL_z = listOfColumns[8]
+        excel_column_INFERIOR_x = listOfColumns[9]
+        excel_column_INFERIOR_y = listOfColumns[10]
+        excel_column_INFERIOR_z = listOfColumns[11]
+        excel_column_LEFT_x = listOfColumns[12]
+        excel_column_LEFT_y = listOfColumns[13]
+        excel_column_LEFT_z = listOfColumns[14]
+        excel_column_RIGHT_x = listOfColumns[15]
+        excel_column_RIGHT_y = listOfColumns[16]
+        excel_column_RIGHT_z = listOfColumns[17]
+        excel_column_SUPERIOR_x = listOfColumns[18]
+        excel_column_SUPERIOR_y = listOfColumns[19]
+        excel_column_SUPERIOR_z = listOfColumns[20]
+
+
+        if targetToBeTransformed == 'centroid_apex':
+            excel_column_APEX_x.append(x)
+            excel_column_APEX_y.append(y)
+            excel_column_APEX_z.append(z)
+        if targetToBeTransformed == 'centroid_base':
+            excel_column_BASE_x.append(x)
+            excel_column_BASE_y.append(y)
+            excel_column_BASE_z.append(z)
+        if targetToBeTransformed == 'centroid_label':
+            excel_column_LABEL_x.append(x)
+            excel_column_LABEL_y.append(y)
+            excel_column_LABEL_z.append(z)
+        if targetToBeTransformed == 'midgland_inferior':
+            excel_column_INFERIOR_x.append(x)
+            excel_column_INFERIOR_y.append(y)
+            excel_column_INFERIOR_z.append(z)
+        if targetToBeTransformed == 'midgland_right':
+            excel_column_RIGHT_x.append(x)
+            excel_column_RIGHT_y.append(y)
+            excel_column_RIGHT_z.append(z)
+        if targetToBeTransformed == 'midgland_left':
+            excel_column_LEFT_x.append(x)
+            excel_column_LEFT_y.append(y)
+            excel_column_LEFT_z.append(z)
+        if targetToBeTransformed == 'midgland_superior':
+            excel_column_SUPERIOR_x.append(x)
+            excel_column_SUPERIOR_y.append(y)
+            excel_column_SUPERIOR_z.append(z)
+
+def createListOfColumns():
+
+    list_of_columns = []
+
+    excel_column_APEX_x = []
+    excel_column_APEX_y = []
+    excel_column_APEX_z = []
+
+    excel_column_BASE_x = []
+    excel_column_BASE_y = []
+    excel_column_BASE_z = []
+
+    excel_column_LABEL_x = []
+    excel_column_LABEL_y = []
+    excel_column_LABEL_z = []
+
+    excel_column_INFERIOR_x = []
+    excel_column_INFERIOR_y = []
+    excel_column_INFERIOR_z = []
+
+    excel_column_LEFT_x = []
+    excel_column_LEFT_y = []
+    excel_column_LEFT_z = []
+
+    excel_column_RIGHT_x = []
+    excel_column_RIGHT_y = []
+    excel_column_RIGHT_z = []
+
+    excel_column_SUPERIOR_x = []
+    excel_column_SUPERIOR_y = []
+    excel_column_SUPERIOR_z = []
+
+
+    list_of_columns.append(excel_column_APEX_x)
+    list_of_columns.append(excel_column_APEX_y)
+    list_of_columns.append(excel_column_APEX_z)
+    list_of_columns.append(excel_column_BASE_x)
+    list_of_columns.append(excel_column_BASE_y)
+    list_of_columns.append(excel_column_BASE_z)
+    list_of_columns.append(excel_column_LABEL_x)
+    list_of_columns.append(excel_column_LABEL_y)
+    list_of_columns.append(excel_column_LABEL_z)
+    list_of_columns.append(excel_column_INFERIOR_x)
+    list_of_columns.append(excel_column_INFERIOR_y)
+    list_of_columns.append(excel_column_INFERIOR_z)
+    list_of_columns.append(excel_column_LEFT_x)
+    list_of_columns.append(excel_column_LEFT_y)
+    list_of_columns.append(excel_column_LEFT_z)
+    list_of_columns.append(excel_column_RIGHT_x)
+    list_of_columns.append(excel_column_RIGHT_y)
+    list_of_columns.append(excel_column_RIGHT_z)
+    list_of_columns.append(excel_column_SUPERIOR_x)
+    list_of_columns.append(excel_column_SUPERIOR_y)
+    list_of_columns.append(excel_column_SUPERIOR_z)
+
+    return list_of_columns
+
+def printListOfColumns(list_of_columns):
+
+    for motionList in range(len(list_of_columns)):
+        print 'list = '+str(getNameOfList(motionList))
+        for i in range(len(list_of_columns[motionList])):
+            print list_of_columns[motionList][i]
 
 def ReadInitialFiducial(dir):
 
@@ -524,17 +709,18 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 #print listOfCaseIDs
 
 # testing:
-#listOfCaseIDs = [268]
+
+#listOfCaseIDs = [10]
 
 createFolders()
-
+list_of_columns = createListOfColumns()
 ################################
 # RUN prostate motion calculation
 
 # register case
 
 for case in listOfCaseIDs:
-  print 'execute meta.py for case '+str(case)
+  #print 'execute meta.py for case '+str(case)
 
   caseDir=getCaseDir(case)
   transformDir=getTransformDir(case)
@@ -547,26 +733,26 @@ for case in listOfCaseIDs:
   needleImageIds = []
   needleImageIds = getNeedleImageIDs(IntraDir)
 
+
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
-  print ('about to run : '+cmd)
-  os.system(cmd)
+  #print ('about to run : '+cmd)
+  #os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
-  print ('about to run : '+cmd)
-  os.system(cmd)
+  #print ('about to run : '+cmd)
+  #os.system(cmd)
 
   # 4. transformCentroids
   transformFiducials(needleImageIds,resDir,case)
 
-  # 5. createMotionSummary
-  createMotionSummary(case,motionDir,centroidDir,needleImageIds)
-
-  # 6. create Config for verification and snapshots
+  # 5. create Config for verification and snapshots
   makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
+  # 6. createMotionSummary
+  createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
-
-# createOverallFiducialSummary(listOfCaseIDs,motionDir)
+# 7. print Motion for Excel
+printListOfColumns(list_of_columns)

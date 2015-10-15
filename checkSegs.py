@@ -59,17 +59,21 @@ def getNeedleImageIDs(IntraDir):
       print 'there is no path like: '+str(IntraDir)
     return needleImageIds
 
-
-print 'list of cases with no segmentation: '
-print '____________________________________'
 count = 0
 count2 = 0
+count3 = 0
+numberOfCases = 0
+
+excel_column_CASE = []
+excel_column_NEEDLEIMAGE = []
+
+
 
 listOfCaseIDs = getListOfCaseIDs(300)
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
-print listOfCaseIDs
+#print listOfCaseIDs
 
 for case in listOfCaseIDs:
 
@@ -78,6 +82,7 @@ for case in listOfCaseIDs:
     tag = 0
     caseDir = getCaseDir(case)
     nids =  getNeedleImageIDs(caseDir)
+
 
     #### CHECK IF NEEDLE SERIES IS SHORT AND COVER-PROSTATE IMAGE IS MISSING
 
@@ -102,7 +107,12 @@ for case in listOfCaseIDs:
 
     for needleImgs in nids:
         count2 += 1
-        count2
+
+        #print case
+        #print needleImgs
+
+        excel_column_CASE.append(case)
+        excel_column_NEEDLEIMAGE.append(needleImgs)
 
     ####
 
@@ -111,8 +121,18 @@ for case in listOfCaseIDs:
     # CHECK FOR TG
 
     firstNeedleImage = nids[0]
+
+    """
     if os.path.exists(caseDir+str(firstNeedleImage)+'-TG.nrrd'):
         print "case "+str(case)+' uses a TG'
+    """
+
+    fileList = os.listdir(caseDir)
+    for file in fileList:
+        if 'TG' in file:
+            if 'Pelvis' not in file:
+              count3 = count3 + 1
+              # print 'found a tg, its '+str(file)
 
     ####
 
@@ -148,6 +168,8 @@ for case in listOfCaseIDs:
 
     """
 
+    numberOfCases = numberOfCases + 1
+
 
 
 """
@@ -156,5 +178,10 @@ print ' no segmentation in '+str(count)+' cases'
 
 """
 print '____________________________________'
-print ' there are '+str(count2)+' needle images in total'
+print 'there are '+str(numberOfCases)+' cases in total'
 
+print '____________________________________'
+print 'there are '+str(count2)+' needle images in total'
+
+print '____________________________________'
+print str(count3)+' manual segmentations were needed'
