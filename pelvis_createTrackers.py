@@ -187,116 +187,25 @@ for case in listOfCaseIDs:
 
     caseDir = getCaseDir(case)
     movingImageID=getMovingImageID(caseDir)
-    maskDir = caseDir+str(movingImageID[len(movingImageID)-1])+'-label.nrrd'
+    maskDir = caseDir+str(movingImageID[len(movingImageID)-1])+'-label-Pelvis.nrrd'
     imageDir = caseDir+str(movingImageID[len(movingImageID)-1])+'-CoverProstate.nrrd'
 
-    result1 = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/first_slice.nrrd'
-    result2 = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/last_slice.nrrd'
-    midSliceDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/mid_slice.nrrd'
+    #result1 = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case)+'/first_slice.nrrd'
+    #result2 = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/last_slice.nrrd'
+    #midSliceDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/mid_slice.nrrd'
 
-    centroid0Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv'
-    centroid1Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_apex.fcsv'
-    centroid2Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_base.fcsv'
-    centroid3Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_inferior.fcsv'
-    centroid4Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_superior.fcsv'
-    centroid5Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_right.fcsv'
-    centroid6Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_left.fcsv'
+    centroid0Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case)+'/centroid_label.fcsv'
+    #centroid1Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_apex.fcsv'
+    #centroid2Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_base.fcsv'
+    #centroid3Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_inferior.fcsv'
+    #centroid4Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_superior.fcsv'
+    #centroid5Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_right.fcsv'
+    #centroid6Dir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_left.fcsv'
 
     try:
-        os.makedirs('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case))
+        os.makedirs('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case))
     except:
         pass
 
     # 1. create centroid for label
     createLabelCentroid(maskDir,centroid0Dir)
-
-    #print '1 through'
-    # 2. create centroid apex and base
-    first,last=findFirstAndLastLabelSlices(maskDir,getLabelID(maskDir))
-
-    extractSlice(maskDir,first,result1)
-    extractSlice(maskDir,last,result2)
-
-    centroid1 = getCentroid(result1,getLabelID(maskDir),first)
-    centroid2 = getCentroid(result2,getLabelID(maskDir),last)
-
-    writeCentroid('centroid_apex',centroid1,centroid1Dir)
-    writeCentroid('centroid_base',centroid2,centroid2Dir)
-
-    #print '2 through'
-    # 3. create fiducials for midslice
-
-    #print 'last = ' +str(last)
-    #print 'first = ' +str(first)
-    midSlice = int(((last-first)/2)+first)
-    #print 'midSlice = '+str(midSlice)
-    #print 'maskDir = '+str(maskDir)
-    extractSlice(maskDir,midSlice,midSliceDir)
-
-    boundingBox = getBoundingBox(maskDir,getLabelID(maskDir))
-
-    upper_left = (boundingBox[0],boundingBox[1])
-    down_right = (boundingBox[0]+boundingBox[3],boundingBox[1]+boundingBox[4])
-
-    half_x_position = (down_right[0]-upper_left[0])/2+upper_left[0]
-    half_y_position = (down_right[1]-upper_left[1])/2+upper_left[1]
-
-    image=sitk.ReadImage(maskDir)
-
-    points_vertical = down_right[1] - upper_left[1]
-    points_horizontal = down_right[0] - upper_left[0]
-
-    # find vertical fiducials
-    points_on_label_vertical = []
-    points_on_label_horizontal = []
-
-    for ypixel in range(upper_left[1],down_right[1]):
-
-
-        # search for points up to down
-
-        x = half_x_position
-        y = ypixel
-        z = midSlice
-
-        if image.GetPixel(x,y,z) != 0:
-            points_on_label_vertical.append((x,y,z))
-
-    for xpixel in range(upper_left[0],down_right[0]):
-
-        # search for points left to right
-
-        x = xpixel
-        y = half_y_position
-        z = midSlice
-
-        if image.GetPixel(x,y,z) != 0:
-            points_on_label_horizontal.append((x,y,z))
-            # print (x,y,z)
-
-
-    #print points_on_label_vertical
-    #print points_on_label_horizontal
-
-    midgland_superior = points_on_label_vertical[0]
-    midgland_inferior = points_on_label_vertical[len(points_on_label_vertical)-1]
-    midgland_left = points_on_label_horizontal[0]
-    midgland_right = points_on_label_horizontal[len(points_on_label_horizontal)-1]
-
-    pp1=convertPointFromIJKtoRAS(midgland_inferior,imageDir)
-    pp2=convertPointFromIJKtoRAS(midgland_superior,imageDir)
-    pp3=convertPointFromIJKtoRAS(midgland_right,imageDir)
-    pp4=convertPointFromIJKtoRAS(midgland_left,imageDir)
-
-    writeCentroid('midgland_inferior',pp1,centroid3Dir)
-    writeCentroid('midgland_superior',pp2,centroid4Dir)
-    writeCentroid('midgland_right',pp3,centroid5Dir)
-    writeCentroid('midgland_left',pp4,centroid6Dir)
-
-
-    # delete temp slices:
-    os.remove(result1)
-    os.remove(result2)
-    os.remove(midSliceDir)
-
-    print 'created fiducial motion trackers for case '+str(case)+' !'

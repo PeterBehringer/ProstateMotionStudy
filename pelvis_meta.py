@@ -44,22 +44,22 @@ def getCaseDir(case):
 def getRegDir(case):
 
     if case < 10:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case00'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case00'+str(case)+'/IntraopImages/'
     elif 9 < case < 100:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case0'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case0'+str(case)+'/IntraopImages/'
     elif 99 < case:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case'+str(case)+'/IntraopImages/'
 
     return regDir
 
 def getTransformDir(case):
 
     if case < 10:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case00'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case0'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case0'+str(case)
     elif 99 < case:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/Case'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case'+str(case)
 
     return transformDir
 
@@ -103,33 +103,33 @@ def getListOfCaseIDs(numberOfCases):
 def getTempDir(case):
 
     if case < 10:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks/Case00'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks/Case0'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case0'+str(case)
     elif 99 < case:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks/Case'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case'+str(case)
 
     return tempDir
 
 def getResDir(case):
 
     if case < 10:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images/Case00'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images/Case0'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case0'+str(case)
     elif 99 < case:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images/Case'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case'+str(case)
 
     return ResDir
 
 def getMotionDir(case):
 
     if case < 10:
-        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case00'+str(case)
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case0'+str(case)
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case0'+str(case)
     elif 99 < case:
-        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/Case'+str(case)
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case'+str(case)
 
     return motionDir
 
@@ -152,13 +152,13 @@ def createCentroid(mask,result):
 
 def transformFiducialsBRAINS(fidIn,tfmIn,fidOut):
   CMD='/Users/peterbehringer/MyProjects/BRAINSTools/BRAINSTools-build/bin/BRAINSConstellationLandmarksTransform -i '+fidIn+' -t '+tfmIn+' -o '+fidOut
-  #print 'about to run : '+CMD
+  print 'about to run : '+CMD
 
   ret = os.system(CMD)
   if ret:
    exit()
 
-def transformFiducials(needleImageIds,ResDir,case):
+def transformFiducialsPelvis(needleImageIds,ResDir,case):
 
     for nid in needleImageIds:
       bsplineTfm=None
@@ -167,17 +167,13 @@ def transformFiducials(needleImageIds,ResDir,case):
 
       # check if there is a matching TG
       transformDir = getTransformDir(case)+'/IntraopImages'
-      bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
+      bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
       #print ('bsplineTfm'+str(bsplineTfm))
-      if not os.path.isfile(bsplineTfm):
-        #print ('went here')
-        bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt1.h5'
-        #print ('bsplineTfm '+str(bsplineTfm))
+
       if not os.path.isfile(bsplineTfm):
         print 'Failed to find ANY transform!'
         exit()
 
-      # TODO: choose if targets or centroids should be registered and saved
 
       #resampled = ResDir+'/'+nidStr+'-Pelvis-RigidRegistered-centroid.fcsv'
       try:
@@ -185,32 +181,44 @@ def transformFiducials(needleImageIds,ResDir,case):
       except:
           pass
 
-      fid1='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_apex.fcsv'
-      fid2='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_base.fcsv'
-      fid3='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv'
-      fid4='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_inferior.fcsv'
-      fid5='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_left.fcsv'
-      fid6='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_right.fcsv'
-      fid7='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_superior.fcsv'
+      fid3='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case)+'/centroid_label.fcsv'
+      #fid4='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_inferior.fcsv'
+      #fid5='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_left.fcsv'
+      #fid6='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_right.fcsv'
+      #fid7='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/midgland_superior.fcsv'
 
-      listOfTargetsToBeTransformed = ['centroid_apex',
-                                      'centroid_base',
-                                      'centroid_label',
-                                      'midgland_inferior',
-                                      'midgland_left',
-                                      'midgland_right',
-                                      'midgland_superior']
+      listOfTargetsToBeTransformed = ['centroid_label']
 
       for i in range(0,len(listOfTargetsToBeTransformed)):
 
-          resampled = centroidDir+'/Case'+str(case)+'/'+str(nidStr)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
-          fidList = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+          resampled = centroidDir+'/Case'+str(case)+'/'+str(nidStr)+'-RigidRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+          fidList = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
 
-          transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
+          transformFiducialsSlicer(fiducialsIn=fidList,transform=bsplineTfm,fiducialsOut=resampled)
 
           i+=1
 
     print ('transformed fiducials for case '+str(case) +'!')
+    print '\n'
+    print '\n'
+    print '\n'
+    print '\n'
+    print '\n'
+
+def transformFiducialsSlicer(fiducialsIn, transform, fiducialsOut):
+      ### done in Slicer!
+      fidLogic = slicer.modules.markups.logic()
+      tfmLogic = slicer.modules.transforms.logic()
+      fidId = fidLogic.LoadMarkupsFiducials(fiducialsIn, 'na')
+      print 'Fiducials loaded:',fidId
+      fid = slicer.mrmlScene.GetNodeByID(fidId)
+      tfm = tfmLogic.AddTransform(transform, slicer.mrmlScene)
+      fid.SetAndObserveTransformNodeID(tfm.GetID())
+      tfmLogic.hardenTransform(fid)
+
+      fidStorage = fid.GetStorageNode()
+      fidStorage.SetFileName(fiducialsOut)
+      fidStorage.WriteData(fid)
 
 def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns):
 
@@ -305,98 +313,6 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
 
         f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
 
-def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns):
-
-    try:
-      os.makedirs(motionDir)
-    except:
-      pass
-
-    listOfTargetsToBeTransformed = ['centroid_apex',
-                                    'centroid_base',
-                                    'centroid_label',
-                                    'midgland_inferior',
-                                    'midgland_left',
-                                    'midgland_right',
-                                    'midgland_superior']
-
-
-    """
-    for nid in needleImageIds:
-
-        nidTime = ReadNeedleTime(case,nid)
-        initialTime = ReadInitialTime(case)
-        passedTime = str(nidTime - initialTime)
-
-        #print ReadInitialTime(case)
-        #print nidTime
-        #print passedTime
-
-    """
-
-    for i in range(0,len(listOfTargetsToBeTransformed)):
-        #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
-        dir = motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt'
-        cmd='touch '+ str(dir)
-        #print dir
-        os.system(cmd)
-
-        f = open(dir, 'w')
-        #f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
-        summary=[]
-        for nid in needleImageIds:
-
-          nidTime = ReadNeedleTime(case,nid)
-          initialTime = ReadInitialTime(case)
-
-          #print nidTime
-
-          resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed/Case'+str(case)+\
-                      '/'+str(nid)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
-
-          initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
-
-          nidPosition = ReadFiducial(resampled)
-
-          #print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
-          #print 'nidPosition[0]'+str(nidPosition[0])
-          #print 'initialPosition[0]'+str(initialPosition[0])
-
-          summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
-
-          x = abs(nidPosition[0]-initialPosition[0])
-          y = abs(nidPosition[1]-initialPosition[1])
-          z = abs(nidPosition[2]-initialPosition[2])
-
-          appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
-
-          #print nidTime-initialTime
-
-        """
-        f.write("\n"+"_____________________________________")
-        #print '_______'
-        #print summary
-
-        avgX = 0
-        avgY = 0
-        avgZ = 0
-
-        for i in range(0,len(needleImageIds)):
-          avgX =avgX+summary[i][3]
-          avgY =avgY+summary[i][4]
-          avgZ =avgZ+summary[i][5]
-
-        avgX=avgX/len(needleImageIds)
-        avgY=avgY/len(needleImageIds)
-        avgZ=avgZ/len(needleImageIds)
-
-        #print avgX
-        #print avgY
-        #print avgZ
-
-        f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
-        """
 def getNameOfList(index):
     
     if index == 0:
@@ -622,8 +538,7 @@ def tm2sec(tm):
   return sec
 
 def ReadInitialTime(case):
-  IntraDir = getCaseDir(case)
-  movingImageID = getMovingImageID(IntraDir)
+  movingImageID = getMovingImageID(caseDir)
   file = IntraDir+str(movingImageID[0])+'.timestamp'
   f=open(file,'r')
   return tm2sec(f.read())
@@ -653,6 +568,7 @@ def createOverallFiducialSummary(listOfCaseIDs,motionDir):
             print fileDir
 
 
+
         f=open(fileDir,'r')
         # ignore line 1-8
         l = f.readlines()[2:len(fileDir)-2]
@@ -663,7 +579,6 @@ def createOverallFiducialSummary(listOfCaseIDs,motionDir):
         print splitted
 
     """
-
     summary.append(splitted)
 
     print summary
@@ -774,150 +689,26 @@ def makeConfig(case,caseDir,needleImageIDs,RegDir,ResDir):
 
     print 'Config file saved as ',cfFileName
 
-def getProdureTimeInSeconds(case):
-
-   lastNeedleTime = 0
-   needleImageIds = getNeedleImageIDs(getCaseDir(case))
-
-   for nid in needleImageIds:
-     lastNeedleTime = ReadNeedleTime(case,nid)
-
-   procedureTimeInSeconds = lastNeedleTime - ReadInitialTime(case)
-   return procedureTimeInSeconds
-
-def plotProcedureTime(listOfCaseIDs):
-
-    import matplotlib.pyplot as plt
-
-    procedureTimesInSeconds = []
-    procedureTimesInMinutes = []
-
-    for case in listOfCaseIDs:
-        print 'current case : '+str(case)
-        procedureTimesInSeconds.append(getProdureTimeInSeconds(case))
-
-    print 'procedureTimesInSeconds'
-    print procedureTimesInSeconds
-
-    for i in range(0,len(procedureTimesInSeconds)):
-        procedureTimesInMinutes.append(procedureTimesInSeconds[i]/60)
-
-    #print procedureTimesInMinutes
-
-    plt.figure(2)
-    plt.plot(listOfCaseIDs,procedureTimesInMinutes,'bo')
-    rect = plt.figure(2)
-    rect.set_facecolor('white')
-    plt.xlabel('case')
-    plt.ylabel('procedure time in minutes')
-    plt.show()
-
-def getLabelVolumeInMl(label,image):
-
-  import SimpleITK as sitk
-
-  label = sitk.ReadImage(label)
-  image = sitk.ReadImage(image)
-
-  stats = sitk.LabelShapeStatisticsImageFilter()
-  stats.Execute(label)
-  labelID=stats.GetLabels()[0]
-
-  pixelcount = stats.GetNumberOfPixels(labelID)
-
-  volume = pixelcount * (image.GetSpacing()[0] * image.GetSpacing()[1] * image.GetSpacing()[2])
-  #print( """Computed volume is {vl} mm^3""".format( vl=volume ))
-
-  # to liter: 1mm^3 = 0.000001 L
-  volume = volume * 0.000001
-
-  # to milliliter:
-  volume = volume * 1000
-
-  return volume
-
-def getProstateVolumes(listOfCaseIDs):
-
-    prostate_volumes = []
-
-    for case in listOfCaseIDs:
-        caseDir = getCaseDir(case)
-        movingImageID = getMovingImageID(caseDir)
-        image = caseDir+str(movingImageID[0])+'-CoverProstate.nrrd'
-        label = caseDir+str(movingImageID[0])+'-label.nrrd'
-        volume_in_mL = getLabelVolumeInMl(label,image)
-        prostate_volumes.append(volume_in_mL)
-
-    return prostate_volumes
-
-def plotProstateVolumes(listOfCaseIDs):
-
-    prostate_volumes = getProstateVolumes(listOfCaseIDs)
-
-    import matplotlib.pyplot as plt
-
-    plt.figure(1)
-    plt.plot(listOfCaseIDs,prostate_volumes,'bo')
-    rect = plt.figure(1)
-    rect.set_facecolor('white')
-    plt.xlabel('case')
-    plt.ylabel('prostate volume in ml')
-    plt.show()
-
-def plotNumberOfNeedleImagesPerCase(listOfCaseIDs):
-
-    number_of_needleImages_per_Case = []
-
-    for case in listOfCaseIDs:
-
-        number_of_needleImages = 0
-        nids = getNeedleImageIDs(getCaseDir(case))
-
-        for nid in nids:
-            number_of_needleImages = number_of_needleImages + 1
-
-        print number_of_needleImages
-        number_of_needleImages_per_Case.append(number_of_needleImages)
-
-    #print number_of_needleImages_per_Case
-
-    import matplotlib.pyplot as plt
-
-    plt.figure(3)
-    plt.plot(listOfCaseIDs,number_of_needleImages_per_Case,'bo')
-    rect = plt.figure(3)
-    rect.set_facecolor('white')
-    plt.xlabel('case')
-    plt.ylabel('number of needle images')
-    plt.show()
-
-def calculateMaxMotion2D(case):
-  print 'TO DO ! '
-
-
-def calculateMaxMotion3D(case):
-  print 'TO DO ! '
-
-
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"
 
 # depedencies:
 # - python anaconda for h5py
 # - simpleitk
+# - pylab ('pip install pylab' into terminal)
+
 
 # dirs
 CaseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/'
-RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms/'
-TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks'
+RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/'
+TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis'
 latestRigidTfm = '/Users/peterbehringer/MyStudies/InitialTransforms/Identity.h5'
-centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed'
-configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
+centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed_Pelvis'
+configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pelvis'
 
 numberOfCases = 300
 listOfCaseIDs = []
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
-procedureTimesInSeconds = []
 
 # get list of cases
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
@@ -927,14 +718,10 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 #print listOfCaseIDs
 
 # testing:
-
 #listOfCaseIDs = [10]
-print listOfCaseIDs
 
 createFolders()
 list_of_columns = createListOfColumns()
-
-
 ################################
 # RUN prostate motion calculation
 
@@ -954,33 +741,26 @@ for case in listOfCaseIDs:
   needleImageIds = []
   needleImageIds = getNeedleImageIDs(IntraDir)
 
+
   # 1. registerCase.py
-  cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
-  #print ('about to run : '+cmd)
-  #os.system(cmd)
+  cmd = ('python pelvis_registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
+  print ('about to run : '+cmd)
+  os.system(cmd)
 
   # 2. resampleCase.py
-  cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
-  #print ('about to run : '+cmd)
+  cmd = ('python pelvis_resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
+  print ('about to run : '+cmd)
   #os.system(cmd)
 
   # 4. transformCentroids
-  #transformFiducials(needleImageIds,resDir,case)
+  #transformFiducialsPelvis(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  # makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  # createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 7. print Motion for Excel
-#printListOfColumns(list_of_columns)
-
-#### DO THE ANALYSIS
-
-#plotProstateVolumes(listOfCaseIDs)
-
-#plotProcedureTime(listOfCaseIDs)
-
-#plotNumberOfNeedleImagesPerCase(listOfCaseIDs)
+# printListOfColumns(list_of_columns)
