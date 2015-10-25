@@ -84,17 +84,17 @@ def getListOfCaseIDs(numberOfCases):
   for case in range(numberOfCases):
     if case < 10:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case00'+str(case)+'/IntraopImages/'
-        print caseDir
+
         if os.path.isdir(str(caseDir)):
              listOfCaseIDs.append(case)
     elif 9 < case < 100:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case0'+str(case)+'/IntraopImages/'
-        print caseDir
+
         if os.path.isdir(str(caseDir)):
              listOfCaseIDs.append(case)
     elif 99 < case:
         caseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/Case'+str(case)+'/IntraopImages/'
-        print caseDir
+
         if os.path.isdir(str(caseDir)):
              listOfCaseIDs.append(case)
 
@@ -363,8 +363,8 @@ def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns
           #print 'initialPosition[0]'+str(initialPosition[0])
 
           summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
-
+          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2])))
+          f.write('\n')
           x = abs(nidPosition[0]-initialPosition[0])
           y = abs(nidPosition[1]-initialPosition[1])
           z = abs(nidPosition[2]-initialPosition[2])
@@ -564,15 +564,7 @@ def ReadInitialFiducial(dir):
 
     f = open(dir, 'r')
     l = f.read()
-    #print l
     i = l.split(',')
-    #print i
-    #print 'i[1]'
-    #print [float(i[1])]
-    #print 'i[2]'
-    #print [float(i[2])]
-    #print 'i[3]'
-    #print [float(i[3])]
     return [float(i[1]),float(i[2]),float(i[3])]
 
 def ReadFiducial(fname):
@@ -891,12 +883,206 @@ def plotNumberOfNeedleImagesPerCase(listOfCaseIDs):
     plt.ylabel('number of needle images')
     plt.show()
 
-def calculateMaxMotion2D(case):
-  print 'TO DO ! '
+def calculateMaxMotionPerCase2DForCentroid(case):
+
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    maxMotionX = 0.0
+    maxMotionY = 0.0
+    maxMotionZ = 0.0
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
 
 
-def calculateMaxMotion3D(case):
-  print 'TO DO ! '
+    # read x,y,z motion positions
+    for line in f:
+        line = line.rstrip('\n')
+        splitted=string.split(str(line),',')
+        xPositions.append(splitted[3])
+        yPositions.append(splitted[4])
+        zPositions.append(splitted[5])
+
+    print 'x positions '
+    for i in range(0,len(xPositions)):
+        print xPositions[i]
+
+    print 'y positions '
+    for i in range(0,len(yPositions)):
+        print yPositions[i]
+
+    print 'z positions '
+    for i in range(0,len(zPositions)):
+        print zPositions[i]
+
+    for nid in range(0,len(getNeedleImageIDs(getCaseDir(case)))-1):
+
+      if abs(maxMotionX) < abs(float(xPositions[nid+1])-float(xPositions[nid])):
+          maxMotionX = float(xPositions[nid+1])-float(xPositions[nid])
+
+      if abs(maxMotionY) < abs(float(yPositions[nid+1])-float(yPositions[nid])):
+          maxMotionY = float(yPositions[nid+1])-float(yPositions[nid])
+
+      if abs(maxMotionZ) < abs(float(zPositions[nid+1])-float(zPositions[nid])):
+          maxMotionZ = float(zPositions[nid+1])-float(zPositions[nid])
+
+
+    print 'maxMotionX : '+str(maxMotionX)
+    print 'maxMotionY : '+str(maxMotionY)
+    print 'maxMotionZ : '+str(maxMotionZ)
+
+    return maxMotionX,maxMotionY,maxMotionZ
+
+def calculate2DXYMotionForTimePoint(case,nid):
+
+    # this function calculates euclidean distance of the centroid between the needle image nid and the nid-1 image
+
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions = []
+    yPositions = []
+
+
+    # read x,y,z motion positions
+    for line in f:
+        line = line.rstrip('\n')
+        splitted=string.split(str(line),',')
+        xPositions.append(splitted[3])
+        yPositions.append(splitted[4])
+
+    print 'x positions : '
+    print xPositions
+
+    print 'y positions : '
+    print yPositions
+
+
+    if nid == getNeedleImageIDs(getCaseDir(case))[0]:
+
+        print 'if case entered'
+
+        [x_1,y_1,z_1] = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv')
+        x_2 = xPositions[0]
+        y_2 = yPositions[0]
+
+        print 'nid : '+str(nid)
+        print 'x_1 :' +str(x_1)
+        print 'y_1 :' +str(y_1)
+        print 'x_2 :' +str(x_2)
+        print 'y_2 :' +str(y_2)
+        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
+
+        return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
+
+    else:
+
+        print 'nid : '+str(nid)
+
+        print 'array_position x1 : ' +str(int(getArrayPosFromNid(case,nid))-1)
+        print 'array_position x2 : ' +str(int(getArrayPosFromNid(case,nid)))
+
+        x_1 = xPositions[int(getArrayPosFromNid(case,nid))-1]
+        y_1 = yPositions[int(getArrayPosFromNid(case,nid))-1]
+        x_2 = xPositions[int(getArrayPosFromNid(case,nid))]
+        y_2 = yPositions[int(getArrayPosFromNid(case,nid))]
+
+        print 'x_1 :' +str(x_1)
+        print 'y_1 :' +str(y_1)
+        print 'x_2 :' +str(x_2)
+        print 'y_2 :' +str(y_2)
+        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
+
+
+        return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
+
+    print 'something went wrong with calculate2DXYMotionForTimePoint'
+
+
+def getArrayPosFromNid(case,nid):
+
+  count = 0
+  for i in getNeedleImageIDs(getCaseDir(case)):
+      if i == nid:
+          return count
+      else:
+          count = count+1
+
+
+def plot2DMaxMotion(listOfCaseIDs):
+
+    maxMotionX = []
+    maxMotionY = []
+
+    for case in listOfCaseIDs:
+      x,y,z = calculateMaxMotionPerCase2DForCentroid(case)
+      maxMotionX.append(x)
+      maxMotionY.append(y)
+
+    import matplotlib.pyplot as plt
+    """
+    plt.figure(5)
+    plt.plot(maxMotionX,maxMotionY,'bo')
+    rect = plt.figure(5)
+    rect.set_facecolor('white')
+    plt.xlabel('Left-Right Max Motion in mm')
+    plt.ylabel('Up-Down Max Motion in mm')
+    plt.show()
+    """
+
+    plt.figure(5)
+    plt.hexbin(maxMotionX, maxMotionY, mincnt=1,gridsize=25,cmap=plt.cm.YlOrRd_r)
+    rect = plt.figure(5)
+    rect.set_facecolor('white')
+    plt.xlim([-15,15])
+    plt.ylim([-15,15])
+    plt.xlabel('Left-Right Max Motion in mm')
+    plt.ylabel('Up-Down Max Motion in mm')
+    cb = plt.colorbar()
+    plt.show()
+
+def plotMotionAsAFunctionOfTime(listOfCaseIDs):
+
+
+    # get x axis
+    list_of_times_in_minutes = []
+    list_of_distances = []
+
+    for case in listOfCaseIDs:
+
+      firstNeedleTime = float(ReadNeedleTime(case,getNeedleImageIDs(getCaseDir(case))[0]))
+      # list_of_times_in_minutes.append(float(ReadInitialTime(case)-ReadInitialTime(case))) dont need x = 0
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+
+      # get movement for timepoint t
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_distances.append(float(calculate2DXYMotionForTimePoint(case,nid)))
+
+
+    print list_of_times_in_minutes
+    print list_of_distances
+
+    import matplotlib.pyplot as plt
+
+    plt.figure(2)
+    plt.plot(list_of_times_in_minutes,list_of_distances,'bo')
+    rect = plt.figure(2)
+    rect.set_facecolor('white')
+    plt.xlabel('time in minutes')
+    plt.ylabel('motion: euclidian 2D distance')
+    plt.show()
+
+
+def getEuclidian2D(x1,y1,x2,y2):
+    import math
+    return math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
 
 
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
@@ -928,8 +1114,8 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
 # testing:
 
-#listOfCaseIDs = [10]
-print listOfCaseIDs
+#listOfCaseIDs = [11]
+#print listOfCaseIDs
 
 createFolders()
 list_of_columns = createListOfColumns()
@@ -971,7 +1157,7 @@ for case in listOfCaseIDs:
   #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  #createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 7. print Motion for Excel
@@ -984,3 +1170,7 @@ for case in listOfCaseIDs:
 #plotProcedureTime(listOfCaseIDs)
 
 #plotNumberOfNeedleImagesPerCase(listOfCaseIDs)
+
+#plot2DMaxMotion(listOfCaseIDs)
+
+#plotMotionAsAFunctionOfTime(listOfCaseIDs)
