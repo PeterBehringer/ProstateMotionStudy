@@ -883,6 +883,54 @@ def plotNumberOfNeedleImagesPerCase(listOfCaseIDs):
     plt.ylabel('number of needle images')
     plt.show()
 
+def plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIds):
+
+    number_of_needleImages_per_Case = []
+
+    for case in listOfCaseIDs:
+
+        number_of_needleImages = 0
+        nids = getNeedleImageIDs(getCaseDir(case))
+
+        for nid in nids:
+            number_of_needleImages = number_of_needleImages + 1
+
+        #print number_of_needleImages
+        number_of_needleImages_per_Case.append(number_of_needleImages)
+
+    #print 'max'
+    #print str(max(number_of_needleImages_per_Case))
+    count = range(0,max(number_of_needleImages_per_Case)+1,1)
+
+    for i in range(len(count)):
+        count[i] = 0
+
+    #print count
+    for i in range(0,len(number_of_needleImages_per_Case)):
+        needleImages = number_of_needleImages_per_Case[i]
+        count[needleImages] += 1
+
+    #print count
+
+
+
+    xrange=range(0,31)
+    print xrange
+    print count
+
+
+    import matplotlib.pyplot as plt
+
+    plt.figure(7)
+    plt.bar(xrange,count)
+    rect = plt.figure(7)
+    rect.set_facecolor('white')
+    plt.xlabel('needle images')
+    plt.ylabel('amount')
+    plt.show()
+
+
+
 def calculateMaxMotionPerCase2DForCentroid(case):
 
     import string
@@ -1080,6 +1128,7 @@ def plotMotionAsAFunctionOfTime(listOfCaseIDs):
     plt.show()
 
 
+
 def getEuclidian2D(x1,y1,x2,y2):
     import math
     return math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
@@ -1171,6 +1220,9 @@ for case in listOfCaseIDs:
 
 #plotNumberOfNeedleImagesPerCase(listOfCaseIDs)
 
+#plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIDs)
+
 #plot2DMaxMotion(listOfCaseIDs)
 
 #plotMotionAsAFunctionOfTime(listOfCaseIDs)
+
