@@ -109,7 +109,7 @@ prostate_volumes = []
 
 
 listOfCaseIDs = getListOfCaseIDs(300)
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
 #listOfCaseIDs = [214]

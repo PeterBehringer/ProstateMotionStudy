@@ -171,9 +171,10 @@ def transformFiducialsPelvis(needleImageIds,ResDir,case):
       #print ('bsplineTfm'+str(bsplineTfm))
 
       if not os.path.isfile(bsplineTfm):
-        print 'Failed to find ANY transform!'
-        exit()
-
+        bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
+        if not os.path.isfile(bsplineTfm):
+            print 'Failed to find ANY transform!'
+            exit()
 
       #resampled = ResDir+'/'+nidStr+'-Pelvis-RigidRegistered-centroid.fcsv'
       try:
@@ -227,27 +228,8 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
     except:
       pass
 
-    listOfTargetsToBeTransformed = ['centroid_apex',
-                                    'centroid_base',
-                                    'centroid_label',
-                                    'midgland_inferior',
-                                    'midgland_left',
-                                    'midgland_right',
-                                    'midgland_superior']
+    listOfTargetsToBeTransformed = ['centroid_label']
 
-
-    """
-    for nid in needleImageIds:
-
-        nidTime = ReadNeedleTime(case,nid)
-        initialTime = ReadInitialTime(case)
-        passedTime = str(nidTime - initialTime)
-
-        #print ReadInitialTime(case)
-        #print nidTime
-        #print passedTime
-
-    """
 
     for i in range(0,len(listOfTargetsToBeTransformed)):
         #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
@@ -257,7 +239,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
         os.system(cmd)
 
         f = open(dir, 'w')
-        f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
+        #f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
         summary=[]
         for nid in needleImageIds:
 
@@ -266,20 +248,20 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
 
           #print nidTime
 
-          resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed/Case'+str(case)+\
-                      '/'+str(nid)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+          resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed_Pelvis/Case'+str(case)+\
+                      '/'+str(nid)+'-RigidRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
 
-          initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
+          initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_Pelvis/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
 
-          nidPosition = ReadFiducial(resampled)
+          nidPosition = ReadRigidFiducial(resampled)
 
           #print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
           #print 'nidPosition[0]'+str(nidPosition[0])
           #print 'initialPosition[0]'+str(initialPosition[0])
 
           summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
-
+          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2])))
+          f.write('\n')
           x = abs(nidPosition[0]-initialPosition[0])
           y = abs(nidPosition[1]-initialPosition[1])
           z = abs(nidPosition[2]-initialPosition[2])
@@ -287,9 +269,8 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
 
           #print nidTime-initialTime
-          print
 
-
+        """
         f.write("\n"+"_____________________________________")
         #print '_______'
         #print summary
@@ -312,7 +293,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
         #print avgZ
 
         f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
-
+        """
 def getNameOfList(index):
     
     if index == 0:
@@ -515,6 +496,30 @@ def ReadFiducial(fname):
     """
     return [float(splitted[1]),float(splitted[2]),float(splitted[3])]
 
+def ReadRigidFiducial(fname):
+
+    f = open(fname, 'r')
+    # ignore line 1-8
+    l = f.readlines()[3:]
+    #print 'l = ',str(l)
+    number_of_fids=len(l)
+    #print ('amount of fids : '+str(number_of_fids))
+    import string
+    splitted=string.split(str(l),',')
+    #print 'splitted = '+str(splitted)
+    #print splitted[1]
+    #print splitted[2]
+    #print splitted[3]
+    """
+    chunks=[splitted[x:x+6] for x in xrange(0, number_of_fids*6, 6)]
+    fiducials=[]
+    for i in range(0,1):
+        # print ('fiducialPoint = '+str(chunks[i][1:4]))
+        fiducials.append(chunks[i][1:4])
+    """
+    return [float(splitted[1]),float(splitted[2]),float(splitted[3])]
+
+
 def tm2sec(tm):
   try:
     hhmmss = string.split(tm,'.')[0]
@@ -657,10 +662,10 @@ def makeConfig(case,caseDir,needleImageIDs,RegDir,ResDir):
 
     for nid in needleImageIds:
       nidStr=str(nid)
-      cf.set('RegisteredData','Image'+nidStr,os.path.join(os.path.abspath(ResDir),nidStr+'-BSpline_resampled.nrrd'))
+      cf.set('RegisteredData','Image'+nidStr,os.path.join(os.path.abspath(ResDir),nidStr+'-Rigid_resampled.nrrd'))
       # TODO: add transformations
-      tfmFile1 = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt1.h5'
-      tfmFile2 = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
+      tfmFile1 = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
+      tfmFile2 = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
 
       print tfmFile1
       print tfmFile2
@@ -708,22 +713,33 @@ configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pe
 
 numberOfCases = 300
 listOfCaseIDs = []
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
-
+ignoreCaseIDs1 = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
 # get list of cases
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
 # ignore cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-#print listOfCaseIDs
 
-# testing:
-#listOfCaseIDs = [10]
+print listOfCaseIDs
+
 
 createFolders()
 list_of_columns = createListOfColumns()
 ################################
 # RUN prostate motion calculation
+
+
+
+# 1. create pelvis labels.py
+cmd = 'python makePelvisMask.py '
+print ('about to run : '+cmd)
+#os.system(cmd)
+
+# 1. create Trackers.py
+cmd = 'python pelvis_createTrackers.py '
+print ('about to run : '+cmd)
+#os.system(cmd)
 
 # register case
 
@@ -745,7 +761,7 @@ for case in listOfCaseIDs:
   # 1. registerCase.py
   cmd = ('python pelvis_registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   print ('about to run : '+cmd)
-  os.system(cmd)
+  #os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python pelvis_resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
@@ -756,11 +772,13 @@ for case in listOfCaseIDs:
   #transformFiducialsPelvis(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  # makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  # createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 7. print Motion for Excel
 # printListOfColumns(list_of_columns)
+
+

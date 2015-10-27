@@ -987,7 +987,7 @@ def calculateMaxMotionPerCase2DForCentroid(case):
 
 def calculate2DXYMotionForTimePoint(case,nid):
 
-    # this function calculates euclidean distance of the centroid between the needle image nid and the nid-1 image
+    # this function calculates euclidean distance of the centroid between the needle image t(nid) and the t(nid-1) image
 
     import string
     dir = getMotionDir(case)
@@ -1052,6 +1052,73 @@ def calculate2DXYMotionForTimePoint(case,nid):
 
     print 'something went wrong with calculate2DXYMotionForTimePoint'
 
+def calculate2DXYMotionForTimePoint2(case,nid):
+
+    # this function calculates euclidean distance of the centroid between the needle image t(nid) and the t(nid-1) image
+
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions = []
+    yPositions = []
+
+
+    # read x,y,z motion positions
+    for line in f:
+        line = line.rstrip('\n')
+        splitted=string.split(str(line),',')
+        xPositions.append(splitted[3])
+        yPositions.append(splitted[4])
+
+    print 'x positions : '
+    print xPositions
+
+    print 'y positions : '
+    print yPositions
+
+
+    if nid == getNeedleImageIDs(getCaseDir(case))[0]:
+
+        print 'if case entered'
+
+        [x_1,y_1,z_1] = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv')
+        x_2 = xPositions[0]
+        y_2 = yPositions[0]
+
+        print 'nid : '+str(nid)
+        print 'x_1 :' +str(x_1)
+        print 'y_1 :' +str(y_1)
+        print 'x_2 :' +str(x_2)
+        print 'y_2 :' +str(y_2)
+        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
+
+        #return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
+        return 0.0
+
+    else:
+
+        print 'nid : '+str(nid)
+
+        print 'array_position x1 : ' +str(int(getArrayPosFromNid(case,nid))-1)
+        print 'array_position x2 : ' +str(int(getArrayPosFromNid(case,nid)))
+
+        x_1 = xPositions[int(getArrayPosFromNid(case,nid))-1]
+        y_1 = yPositions[int(getArrayPosFromNid(case,nid))-1]
+        x_2 = xPositions[int(getArrayPosFromNid(case,nid))]
+        y_2 = yPositions[int(getArrayPosFromNid(case,nid))]
+
+        print 'x_1 :' +str(x_1)
+        print 'y_1 :' +str(y_1)
+        print 'x_2 :' +str(x_2)
+        print 'y_2 :' +str(y_2)
+        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
+
+
+        return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
+
+    print 'something went wrong with calculate2DXYMotionForTimePoint'
 
 def getArrayPosFromNid(case,nid):
 
@@ -1127,7 +1194,37 @@ def plotMotionAsAFunctionOfTime(listOfCaseIDs):
     plt.ylabel('motion: euclidian 2D distance')
     plt.show()
 
+def plotMotionAsAFunctionOfTimeFromFirstNeedleImage(listOfCaseIDs):
 
+
+    # get x axis
+    list_of_times_in_minutes = []
+    list_of_distances = []
+
+    for case in listOfCaseIDs:
+
+      firstNeedleTime = float(ReadNeedleTime(case,getNeedleImageIDs(getCaseDir(case))[0]))
+      # list_of_times_in_minutes.append(float(ReadInitialTime(case)-ReadInitialTime(case))) dont need x = 0
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+
+      # get movement for timepoint t
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_distances.append(float(calculate2DXYMotionForTimePoint2(case,nid)))
+
+
+    print list_of_times_in_minutes
+    print list_of_distances
+
+    import matplotlib.pyplot as plt
+
+    plt.figure(2)
+    plt.plot(list_of_times_in_minutes,list_of_distances,'bo')
+    rect = plt.figure(2)
+    rect.set_facecolor('white')
+    plt.xlabel('time in minutes')
+    plt.ylabel('motion: euclidian 2D distance')
+    plt.show()
 
 def getEuclidian2D(x1,y1,x2,y2):
     import math
@@ -1152,6 +1249,7 @@ configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
 numberOfCases = 300
 listOfCaseIDs = []
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
 procedureTimesInSeconds = []
 
 # get list of cases
@@ -1163,7 +1261,7 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
 # testing:
 
-#listOfCaseIDs = [11]
+listOfCaseIDs = [150,269,275,278,293,280,281,282,285,286,287]
 #print listOfCaseIDs
 
 createFolders()
@@ -1173,7 +1271,10 @@ list_of_columns = createListOfColumns()
 ################################
 # RUN prostate motion calculation
 
-# register case
+# 0. create motion tracker points.py
+cmd = ('python createTrackers.py ')
+print ('about to run : '+cmd)
+os.system(cmd)
 
 for case in listOfCaseIDs:
   #print 'execute meta.py for case '+str(case)
@@ -1191,22 +1292,22 @@ for case in listOfCaseIDs:
 
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
-  #print ('about to run : '+cmd)
-  #os.system(cmd)
+  print ('about to run : '+cmd)
+  os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
-  #print ('about to run : '+cmd)
-  #os.system(cmd)
+  print ('about to run : '+cmd)
+  os.system(cmd)
 
   # 4. transformCentroids
-  #transformFiducials(needleImageIds,resDir,case)
+  transformFiducials(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  #createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 7. print Motion for Excel
@@ -1226,3 +1327,4 @@ for case in listOfCaseIDs:
 
 #plotMotionAsAFunctionOfTime(listOfCaseIDs)
 
+#plotMotionAsAFunctionOfTimeFromFirstNeedleImage(listOfCaseIDs)

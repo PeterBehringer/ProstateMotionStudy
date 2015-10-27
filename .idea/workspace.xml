@@ -32,16 +32,16 @@
       <file leaf-file-name="meta.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/meta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.84230286" vertical-offset="13979" max-vertical-offset="14868">
-              <caret line="1222" column="44" selection-start-line="1222" selection-start-column="1" selection-end-line="1222" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.49394673" vertical-offset="13326" max-vertical-offset="15048">
+              <caret line="1263" column="57" selection-start-line="1263" selection-start-column="57" selection-end-line="1263" selection-end-column="57" />
               <folding>
-                <element signature="e#0#42#0" expanded="true" />
                 <element signature="e#539#680#0" expanded="false" />
                 <element signature="e#1676#2086#0" expanded="false" />
                 <element signature="e#3395#3770#0" expanded="false" />
                 <element signature="e#4203#4589#0" expanded="false" />
                 <element signature="e#5010#5232#0" expanded="false" />
                 <element signature="e#5291#7909#0" expanded="false" />
+                <element signature="e#11491#14918#0" expanded="false" />
                 <element signature="e#14954#16169#0" expanded="false" />
                 <element signature="e#16252#18566#0" expanded="false" />
                 <element signature="e#18600#20334#0" expanded="false" />
@@ -54,35 +54,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pelvis_meta.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pelvis_meta.py">
+      <file leaf-file-name="makeSnapshots.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/makeSnapshots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4194" max-vertical-offset="11178">
-              <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
-              <folding>
-                <element signature="e#11486#12701#0" expanded="false" />
-                <element signature="e#12784#15098#0" expanded="false" />
-                <element signature="e#15132#16866#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterAffineBspline.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/C3D808CD-130F-4185-973D-C164FA7DB8A2/RegisterAffineBspline.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="892" max-vertical-offset="2268">
-              <caret line="65" column="60" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="3312">
+              <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pelvis_test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pelvis_test.py">
+      <file leaf-file-name="pelvis_makeSnapshots.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pelvis_makeSnapshots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="234" max-vertical-offset="414">
-              <caret line="13" column="30" selection-start-line="13" selection-start-column="30" selection-end-line="13" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2128" max-vertical-offset="3204">
+              <caret line="132" column="11" selection-start-line="132" selection-start-column="11" selection-end-line="132" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VisAIRe.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/MyProjects/Modules/git/VisAIRe/VisAIRe.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.1851852" vertical-offset="5440" max-vertical-offset="15192">
+              <caret line="316" column="43" selection-start-line="316" selection-start-column="43" selection-end-line="316" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -91,8 +87,8 @@
       <file leaf-file-name="checkSegs.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/checkSegs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="4932">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="49" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1188" max-vertical-offset="4932">
+              <caret line="97" column="25" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
               <folding>
                 <element signature="e#1125#1652#0" expanded="false" />
               </folding>
@@ -100,24 +96,42 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot_graphics.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plot_graphics.py">
+      <file leaf-file-name="createTrackers.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/createTrackers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="342" max-vertical-offset="1098">
-              <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="5544">
+              <caret line="181" column="47" selection-start-line="181" selection-start-column="47" selection-end-line="181" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlotExecutionTimeSummary.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../RegBxEvaluation/PlotExecutionTimeSummary.py">
+      <file leaf-file-name="pelvis_meta.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pelvis_meta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1838" max-vertical-offset="2880">
-              <caret line="104" column="7" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="7" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="13092" max-vertical-offset="14202">
+              <caret line="771" column="3" selection-start-line="771" selection-start-column="3" selection-end-line="771" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pelvis_createTrackers.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pelvis_createTrackers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2720" max-vertical-offset="3906">
+              <caret line="181" column="47" selection-start-line="181" selection-start-column="47" selection-end-line="181" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="makePelvisMask.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/makePelvisMask.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="533" max-vertical-offset="1746">
+              <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -141,18 +155,19 @@
         <option value="$PROJECT_DIR$/resampleCase.py" />
         <option value="$PROJECT_DIR$/getTargets.py" />
         <option value="$PROJECT_DIR$/registerCase.py" />
-        <option value="$USER_HOME$/MyProjects/Modules/git/VisAIRe/VisAIRe.py" />
-        <option value="$PROJECT_DIR$/makePelvisMask.py" />
         <option value="$PROJECT_DIR$/../Cases003-298_data/Case066/IntraopImages/14.timestamp" />
         <option value="$PROJECT_DIR$/makeSnapshots.py" />
-        <option value="$PROJECT_DIR$/pelvis_createTrackers.py" />
-        <option value="$PROJECT_DIR$/createTrackers.py" />
         <option value="$PROJECT_DIR$/pelvis_test.py" />
         <option value="$PROJECT_DIR$/pelvis_registerCase.py" />
         <option value="$PROJECT_DIR$/pelvis_resampleCase.py" />
-        <option value="$PROJECT_DIR$/pelvis_meta.py" />
-        <option value="$PROJECT_DIR$/checkSegs.py" />
         <option value="$PROJECT_DIR$/plot_graphics.py" />
+        <option value="$PROJECT_DIR$/createTrackers.py" />
+        <option value="$PROJECT_DIR$/pelvis_createTrackers.py" />
+        <option value="$PROJECT_DIR$/makePelvisMask.py" />
+        <option value="$PROJECT_DIR$/pelvis_meta.py" />
+        <option value="$PROJECT_DIR$/pelvis_makeSnapshots.py" />
+        <option value="$USER_HOME$/MyProjects/Modules/git/VisAIRe/VisAIRe.py" />
+        <option value="$PROJECT_DIR$/checkSegs.py" />
         <option value="$PROJECT_DIR$/meta.py" />
       </list>
     </option>
@@ -161,9 +176,9 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="122" />
-    <option name="y" value="137" />
-    <option name="width" value="1515" />
+    <option name="x" value="190" />
+    <option name="y" value="97" />
+    <option name="width" value="1503" />
     <option name="height" value="946" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -488,7 +503,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="122" y="137" width="1515" height="946" extended-state="0" />
+    <frame x="190" y="97" width="1503" height="946" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -497,7 +512,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33552092" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2539036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26283368" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -531,18 +546,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="29" />
+      <option name="time" value="33" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resampleCase.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1217" max-vertical-offset="2034">
-          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/arrangeData.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="324">
@@ -669,13 +677,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/makeCentroid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="972">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../RegBxEvaluation/createOverallFiducialSummary.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="954">
@@ -739,45 +740,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/makeConfig.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1998">
-          <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/registerCase.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="640" max-vertical-offset="3762">
           <caret line="101" column="36" selection-start-line="101" selection-start-column="36" selection-end-line="101" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/makePelvisMask.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="1044">
-          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/MyProjects/Modules/git/VisAIRe/VisAIRe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5554" max-vertical-offset="15354">
-          <caret line="329" column="35" selection-start-line="329" selection-start-column="35" selection-end-line="329" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/makeSnapshots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2466">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/createTrackers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39675173" vertical-offset="1836" max-vertical-offset="4428">
-          <caret line="182" column="89" selection-start-line="182" selection-start-column="89" selection-end-line="182" selection-end-column="89" />
         </state>
       </provider>
     </entry>
@@ -802,40 +768,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pelvis_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
-          <caret line="13" column="30" selection-start-line="13" selection-start-column="30" selection-end-line="13" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/C3D808CD-130F-4185-973D-C164FA7DB8A2/RegisterAffineBspline.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="892" max-vertical-offset="2268">
           <caret line="65" column="60" selection-start-line="65" selection-start-column="54" selection-end-line="65" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/getTargets.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="2430">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="34" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pelvis_createTrackers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1468" max-vertical-offset="3888">
-          <caret line="88" column="26" selection-start-line="88" selection-start-column="26" selection-end-line="88" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/makeFiducialSummaryTable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.3922262" vertical-offset="0" max-vertical-offset="3456">
-          <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -850,9 +786,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1838" max-vertical-offset="2880">
           <caret line="104" column="7" selection-start-line="104" selection-start-column="4" selection-end-line="104" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -870,48 +803,126 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/checkSegs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="4932">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="49" selection-end-column="15" />
-          <folding>
-            <element signature="e#1125#1652#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot_graphics.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1098">
           <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/getTargets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28329298" vertical-offset="0" max-vertical-offset="2430">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pelvis_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37638375" vertical-offset="0" max-vertical-offset="813">
+          <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makeCentroid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.56658596" vertical-offset="0" max-vertical-offset="972">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makeConfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.30750605" vertical-offset="848" max-vertical-offset="1998">
+          <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makeFiducialSummaryTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2915129" vertical-offset="2643" max-vertical-offset="3456">
+          <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pelvis_createTrackers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2720" max-vertical-offset="3906">
+          <caret line="181" column="47" selection-start-line="181" selection-start-column="47" selection-end-line="181" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makePelvisMask.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="533" max-vertical-offset="1746">
+          <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pelvis_meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4194" max-vertical-offset="11178">
-          <caret line="257" column="0" selection-start-line="257" selection-start-column="0" selection-end-line="257" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="13092" max-vertical-offset="14202">
+          <caret line="771" column="3" selection-start-line="771" selection-start-column="3" selection-end-line="771" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/createTrackers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2408" max-vertical-offset="5544">
+          <caret line="181" column="47" selection-start-line="181" selection-start-column="47" selection-end-line="181" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makeSnapshots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="3312">
+          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pelvis_makeSnapshots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2128" max-vertical-offset="3204">
+          <caret line="132" column="11" selection-start-line="132" selection-start-column="11" selection-end-line="132" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/MyProjects/Modules/git/VisAIRe/VisAIRe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.1851852" vertical-offset="5440" max-vertical-offset="15192">
+          <caret line="316" column="43" selection-start-line="316" selection-start-column="43" selection-end-line="316" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checkSegs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1188" max-vertical-offset="4932">
+          <caret line="97" column="25" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
           <folding>
-            <element signature="e#11486#12701#0" expanded="false" />
-            <element signature="e#12784#15098#0" expanded="false" />
-            <element signature="e#15132#16866#0" expanded="false" />
+            <element signature="e#1125#1652#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/meta.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.84230286" vertical-offset="13979" max-vertical-offset="14868">
-          <caret line="1222" column="44" selection-start-line="1222" selection-start-column="1" selection-end-line="1222" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.49394673" vertical-offset="13326" max-vertical-offset="15048">
+          <caret line="1263" column="57" selection-start-line="1263" selection-start-column="57" selection-end-line="1263" selection-end-column="57" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
             <element signature="e#539#680#0" expanded="false" />
             <element signature="e#1676#2086#0" expanded="false" />
             <element signature="e#3395#3770#0" expanded="false" />
             <element signature="e#4203#4589#0" expanded="false" />
             <element signature="e#5010#5232#0" expanded="false" />
             <element signature="e#5291#7909#0" expanded="false" />
+            <element signature="e#11491#14918#0" expanded="false" />
             <element signature="e#14954#16169#0" expanded="false" />
             <element signature="e#16252#18566#0" expanded="false" />
             <element signature="e#18600#20334#0" expanded="false" />
