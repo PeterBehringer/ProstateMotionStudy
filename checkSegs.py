@@ -181,6 +181,8 @@ for case in listOfCaseIDs:
         #print "case "+str(case)+' uses a TG'
 
 
+
+
     fileList = os.listdir(caseDir)
     for file in fileList:
         if 'Pelvis-Pelvis' in file:

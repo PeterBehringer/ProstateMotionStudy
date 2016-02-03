@@ -1,6 +1,5 @@
 import os, argparse, string, re, sys, glob
 from time import time
-import SimpleITK as sitk
 
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"

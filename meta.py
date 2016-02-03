@@ -1230,6 +1230,32 @@ def getEuclidian2D(x1,y1,x2,y2):
     import math
     return math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
 
+def printListOfProstateVolumes(listOfCaseIDs):
+
+    prostate_volumes = []
+
+    for case in listOfCaseIDs:
+
+        # GET PROSTATE SIZE in ml
+        nids = getNeedleImageIDs(getCaseDir(case))
+
+        for needleImgs in nids:
+            caseDir = getCaseDir(case)
+            print ReadNeedleTime(case,needleImgs)-ReadInitialTime(case)
+            """
+            movingImageID = getMovingImageID(caseDir)
+            image = caseDir+str(movingImageID[0])+'-CoverProstate.nrrd'
+            label = caseDir+str(movingImageID[0])+'-label.nrrd'
+            size_in_mL = getLabelVolumeInMl(label,image)
+            prostate_volumes.append(size_in_mL)
+            print size_in_mL
+            """
+
+
+def deleteOldTransforms(dir):
+    if dir:
+        cmd = ("rm -rfv "+str(dir)+"/*")
+        os.system(cmd)
 
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"
@@ -1248,8 +1274,8 @@ configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
 
 numberOfCases = 300
 listOfCaseIDs = []
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+
 procedureTimesInSeconds = []
 
 # get list of cases
@@ -1257,12 +1283,13 @@ listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
 # ignore cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-#print listOfCaseIDs
+listOfCaseIDs = sorted(listOfCaseIDs)
+listOfCaseIDs = [124]
+
+print listOfCaseIDs
 
 # testing:
 
-listOfCaseIDs = [150,269,275,278,293,280,281,282,285,286,287]
-#print listOfCaseIDs
 
 createFolders()
 list_of_columns = createListOfColumns()
@@ -1274,7 +1301,7 @@ list_of_columns = createListOfColumns()
 # 0. create motion tracker points.py
 cmd = ('python createTrackers.py ')
 print ('about to run : '+cmd)
-os.system(cmd)
+#os.system(cmd)
 
 for case in listOfCaseIDs:
   #print 'execute meta.py for case '+str(case)
@@ -1289,6 +1316,9 @@ for case in listOfCaseIDs:
 
   needleImageIds = []
   needleImageIds = getNeedleImageIDs(IntraDir)
+
+  # 0. Delete old transforms
+  deleteOldTransforms(regDir)
 
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
@@ -1310,8 +1340,20 @@ for case in listOfCaseIDs:
   createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
+# 0. make snapshots and GIFs
+#cmd = ('python makeSnapshots.py ')
+#print ('about to run : '+cmd)
+#os.system(cmd)
+
+# 7. Print Prostate Volumes for Excel
+#printListOfProstateVolumes(listOfCaseIDs)
+
 # 7. print Motion for Excel
 #printListOfColumns(list_of_columns)
+
+# 9. print Pelvis Motion
+#printPelvisMotion(listOfCaseIDs)
+
 
 #### DO THE ANALYSIS
 

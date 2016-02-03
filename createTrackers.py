@@ -180,10 +180,9 @@ def getCaseDir(case):
 
 numberOfCases = 300
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142,150,269,275,278,280,281,282,285,286,287,293]
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+ignoreCaseIDs = [4,5,7,8,142]
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-listOfCaseIDs = [150,269,275,278, 293,280, 281, 282, 285, 286, 287]
+
 
 for case in listOfCaseIDs:
 

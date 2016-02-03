@@ -45,14 +45,10 @@ def getListOfCaseIDs(numberOfCases):
 
 listOfCaseIDs = getListOfCaseIDs(300)
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
-
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
+#alreadyGotThose = range(0,52)
+#listOfCaseIDs = list(set(listOfCaseIDs) - set(alreadyGotThose))
 
-alreadyGotThose = range(0,270,1)
-listOfCaseIDs=list(set(listOfCaseIDs) - set(alreadyGotThose))
-listOfCaseIDs = sorted(listOfCaseIDs)
-
-listOfCaseIDs =[270]
 
 def getNeedleImageIDs(IntraDir):
     needleImageIds = []
@@ -70,8 +66,11 @@ def getNeedleImageIDs(IntraDir):
 
 # this script is launched inside slicer.
 # open python terminal, type:
-# execfile ('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/scripts/makeSnapshots.py')
-# to launch it. Also, make sure that VisAIRe is installed as a module and open!
+# execfile ('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/scripts/pelvis_makeSnapshots.py')
+# to launch it. Also, make sure that
+# - VisAIRe is installed as a module and open
+# - snapshot path that is set in VisAIRe.py !
+
 
 
 for case in listOfCaseIDs:
@@ -99,7 +98,7 @@ import sys, glob, string, os, re
 # take pairs that have the same needle id, coombine into gif
 
 inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots_Pelvis/'
-outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs_Pelvis/'
+outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs_Pelivs'
 
 inputFiles = glob.glob(inputDir+'/*png')
 

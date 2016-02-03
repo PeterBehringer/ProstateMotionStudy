@@ -90,3 +90,5 @@ for case in listOfCaseIDs:
       sitk.WriteImage(changedLabel, outputLabel, True)
 
   print(str(case)+' done')
+
+
