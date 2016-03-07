@@ -133,6 +133,17 @@ def getMotionDir(case):
 
     return motionDir
 
+def getMotionDirPelvis(case):
+
+    if case < 10:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case00'+str(case)
+    elif 9 < case < 100:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case0'+str(case)
+    elif 99 < case:
+        motionDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion_Pelvis/Case'+str(case)
+
+    return motionDir
+
 def createCentroid(mask,result):
 
   import SimpleITK as sitk
@@ -228,7 +239,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
                                     'midgland_superior']
 
 
-    """
+
     for nid in needleImageIds:
 
         nidTime = ReadNeedleTime(case,nid)
@@ -237,9 +248,9 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
 
         #print ReadInitialTime(case)
         #print nidTime
-        #print passedTime
+        print passedTime
 
-    """
+
 
     for i in range(0,len(listOfTargetsToBeTransformed)):
         #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
@@ -249,7 +260,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
         os.system(cmd)
 
         f = open(dir, 'w')
-        f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
+        #f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
         summary=[]
         for nid in needleImageIds:
 
@@ -270,7 +281,8 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           #print 'initialPosition[0]'+str(initialPosition[0])
 
           summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write("\n"+str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+', '+str(abs(nidPosition[1]-initialPosition[1]))+', '+str(abs(nidPosition[2]-initialPosition[2])))
+          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2]))+','+'\n')
+
 
           x = abs(nidPosition[0]-initialPosition[0])
           y = abs(nidPosition[1]-initialPosition[1])
@@ -282,7 +294,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           print
 
 
-        f.write("\n"+"_____________________________________")
+        #f.write("\n"+"_____________________________________")
         #print '_______'
         #print summary
 
@@ -303,7 +315,7 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
         #print avgY
         #print avgZ
 
-        f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
+        #f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
 
 def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns):
 
@@ -321,7 +333,7 @@ def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns
                                     'midgland_superior']
 
 
-    """
+
     for nid in needleImageIds:
 
         nidTime = ReadNeedleTime(case,nid)
@@ -330,9 +342,9 @@ def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns
 
         #print ReadInitialTime(case)
         #print nidTime
-        #print passedTime
+        print passedTime
 
-    """
+"""
 
     for i in range(0,len(listOfTargetsToBeTransformed)):
         #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
@@ -372,8 +384,8 @@ def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns
           appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
 
           #print nidTime-initialTime
-
-        """
+"""
+"""
         f.write("\n"+"_____________________________________")
         #print '_______'
         #print summary
@@ -396,9 +408,9 @@ def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns
         #print avgZ
 
         f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
-        """
+"""
 def getNameOfList(index):
-    
+
     if index == 0:
         return 'excel_column_APEX_x'
     if index == 1:
@@ -416,7 +428,7 @@ def getNameOfList(index):
     if index == 7:
         return 'excel_column_LABEL_y'
     if index == 8:
-        return 'excel_column_LABEL_z'   
+        return 'excel_column_LABEL_z'
     if index == 9:
         return 'excel_column_INFERIOR_x'
     if index == 10:
@@ -441,7 +453,7 @@ def getNameOfList(index):
         return 'excel_column_SUPERIOR_y'
     if index == 20:
         return 'excel_column_SUPERIOR_z'
-    
+
 def appendToExcelColumn(targetToBeTransformed,x,y,z,listOfColumns):
 
         excel_column_APEX_x = listOfColumns[0]
@@ -845,15 +857,74 @@ def getProstateVolumes(listOfCaseIDs):
 def plotProstateVolumes(listOfCaseIDs):
 
     prostate_volumes = getProstateVolumes(listOfCaseIDs)
-
+    """
     import matplotlib.pyplot as plt
 
     plt.figure(1)
-    plt.plot(listOfCaseIDs,prostate_volumes,'bo')
+    plt.plot(listOfCaseIDs,prostate_volumes,'ko')
     rect = plt.figure(1)
     rect.set_facecolor('white')
     plt.xlabel('case')
     plt.ylabel('prostate volume in ml')
+    plt.show()
+    """
+
+    import matplotlib.pyplot as plt
+    plt.figure(1)
+    plt.hist(prostate_volumes,bins = 50,color = 'white',edgecolor='black',)
+    rect = plt.figure(1)
+    rect.set_facecolor('white')
+    plt.xlabel('prostate volume in ml')
+    plt.ylabel('frequency')
+    plt.show()
+
+
+def plotNumberOfTargets():
+
+    amount_of_targets = [6,4,8,7,5,4,6,2,3,5,6,6,7,7,3,2,2,4,2,9,11,7,4,2,3,4,4,6,3,2
+        ,4,5,4,7,2,5,5,5,4,4,5,6,2,5,2,3,1,2,2,4,2,3,1,2,2,2,2,5,3,4,3,4,3,6,4,6,4,3,2
+        ,1,4,3,1,3,4,3,4,4,5,5,3,3,4,1,3,5,5,3,3,3,3,4,1,3,5,3,5,3,3,2,3,4,1,1,1,1,2,3,
+         1,1,4,1,3,1,2,2,3,1,1,3,4,3,1,2,1,1,3,1,2,2,1,1,1,2,2,1,2,1,1,
+         2,1,2,1,1,1,1,3,2,1,2,1,2,3,1,1,3,2,1,1,1,2,1,1,1,1,1,1,1,3,2,
+         1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,2,1,2,1,2,1,1,2,3,1,1,2,1,1,2,15,
+         1,1,2,2,1,7,2,14,1,2,4,1,1,2,1,2,1,1,2,2,12,2,1,2,1,1,1,2,1,6,2
+        ,1,2,1,1,2,1,2,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2]
+
+
+    target_distribution = range(max(amount_of_targets)+1)
+    for i in range(1,max(amount_of_targets)+1):
+        print i
+        target_distribution[i]=0
+
+    #print target_distribution
+
+    for j in amount_of_targets:
+        target_distribution[j]+= 1
+
+    print target_distribution
+
+    xrange=range(0,max(amount_of_targets)+1)
+    print xrange
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.figure(7)
+
+
+
+    x = np.arange(0, max(amount_of_targets)+1, 1)
+    plt.bar(x,target_distribution,color='white', edgecolor='black')
+    rect = plt.figure(7)
+    rect.set_facecolor('white')
+
+    axes = plt.gca()
+    axes.set_xlim([0,16
+                   ])
+
+
+    plt.xlabel('number of biopsy targets')
+    plt.ylabel('biopsy cases')
     plt.show()
 
 def plotNumberOfNeedleImagesPerCase(listOfCaseIDs):
@@ -868,10 +939,10 @@ def plotNumberOfNeedleImagesPerCase(listOfCaseIDs):
         for nid in nids:
             number_of_needleImages = number_of_needleImages + 1
 
-        print number_of_needleImages
+        #print str(number_of_needleImages)+','
         number_of_needleImages_per_Case.append(number_of_needleImages)
 
-    #print number_of_needleImages_per_Case
+    print number_of_needleImages_per_Case
 
     import matplotlib.pyplot as plt
 
@@ -912,8 +983,6 @@ def plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIds):
 
     #print count
 
-
-
     xrange=range(0,31)
     print xrange
     print count
@@ -922,14 +991,112 @@ def plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIds):
     import matplotlib.pyplot as plt
 
     plt.figure(7)
-    plt.bar(xrange,count)
+    plt.bar(xrange,count,color='white', edgecolor='black')
     rect = plt.figure(7)
     rect.set_facecolor('white')
     plt.xlabel('needle images')
     plt.ylabel('amount')
     plt.show()
 
+def calculateMaxMotionPerCase3DForCentroid(case):
 
+
+    # this is eucledian distance
+
+
+    print 'start'
+    print str(case)
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    maxMotion3D = 0.0
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    three_d_motion = []
+
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            print splitted
+            print splitted[3]
+
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+            print splitted[5]
+
+
+    print 'x positions '
+    for i in range(0,len(xPositions)):
+        print xPositions[i]
+
+    print 'y positions '
+    for i in range(0,len(yPositions)):
+        print yPositions[i]
+
+    print 'z positions '
+    for i in range(0,len(zPositions)):
+        print zPositions[i]
+
+
+    print 'here '
+    print str(int(len(getNeedleImageIDs(getCaseDir(case)))-1))
+
+    if len(getNeedleImageIDs(getCaseDir(case)))-1 == 0:
+        # for cases with only 1 needle image, eg 154
+
+        nid = 0
+        import math
+        x1=float(xPositions[nid])
+        y1=float(yPositions[nid])
+        z1=float(xPositions[nid])
+        maxMotion3D = math.sqrt(x1*x1+y1*y1+z1*z1)
+        three_d_motion.append(maxMotion3D)
+        print '3DMotion nid = '+str(nid)
+        print str(three_d_motion)
+
+    else:
+        for nid in range(0,len(getNeedleImageIDs(getCaseDir(case)))-1):
+            #calculate 3D distances
+            import math
+
+            x1=float(xPositions[nid])
+            x2=float(xPositions[nid+1])
+
+            y1=float(yPositions[nid])
+            y2=float(yPositions[nid+1])
+
+            z1=float(xPositions[nid])
+            z2=float(xPositions[nid+1])
+
+            if nid == 0:
+                print 'IM HERE'
+                maxMotion3D = math.sqrt(x1*x1+y1*y1+z1*z1)
+                three_d_motion.append(maxMotion3D)
+                print '3DMotion nid = '+str(nid)
+                print str(three_d_motion)
+
+            else:
+                maxMotion3D = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1))
+                three_d_motion.append(maxMotion3D)
+                print '3DMotion nid = '+str(nid)
+                print str(three_d_motion)
+
+    print three_d_motion
+    print maxMotion3D
+    print case
+    maxMotion3D = max(three_d_motion)
+    print maxMotion3D
+    return maxMotion3D
 
 def calculateMaxMotionPerCase2DForCentroid(case):
 
@@ -946,14 +1113,20 @@ def calculateMaxMotionPerCase2DForCentroid(case):
     yPositions = []
     zPositions = []
 
-
     # read x,y,z motion positions
     for line in f:
-        line = line.rstrip('\n')
-        splitted=string.split(str(line),',')
-        xPositions.append(splitted[3])
-        yPositions.append(splitted[4])
-        zPositions.append(splitted[5])
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            print splitted
+            print splitted[3]
+
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+            print splitted[5]
+
 
     print 'x positions '
     for i in range(0,len(xPositions)):
@@ -983,6 +1156,235 @@ def calculateMaxMotionPerCase2DForCentroid(case):
     print 'maxMotionY : '+str(maxMotionY)
     print 'maxMotionZ : '+str(maxMotionZ)
 
+    print 'DEBUG :: '
+    print zPositions
+
+    return maxMotionX,maxMotionY,maxMotionZ
+
+def calculateMaxMotionPerCase3DForCentroid_WITH_COMPENSATION(case):
+
+    print 'start'
+    print str(case)
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    maxMotion3D = 0.0
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    three_d_motion = []
+
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            print splitted
+            print splitted[3]
+
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+            print splitted[5]
+
+
+    # LOAD PELVIS POINTS
+
+    import string
+    dir = getMotionDirPelvis(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions_pelvis = []
+    yPositions_pelvis = []
+    zPositions_pelvis = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+
+            xPositions_pelvis.append(splitted[3])
+            yPositions_pelvis.append(splitted[4])
+            zPositions_pelvis.append(splitted[5])
+
+    print 'x positions _pelvis'
+    for i in range(0,len(xPositions_pelvis)):
+        print xPositions_pelvis[i]
+
+    print 'y positions _pelvis'
+    for i in range(0,len(yPositions_pelvis)):
+        print yPositions_pelvis[i]
+
+    print 'z positions _pelvis'
+    for i in range(0,len(zPositions_pelvis)):
+        print zPositions_pelvis[i]
+
+    for i in range(len(xPositions)):
+        xPositions[i]=float(xPositions[i])-float(xPositions_pelvis[i])
+        yPositions[i]=float(yPositions[i])-float(yPositions_pelvis[i])
+        zPositions[i]=float(zPositions[i])-float(zPositions_pelvis[i])
+
+
+    print 'here '
+    print str(int(len(getNeedleImageIDs(getCaseDir(case)))-1))
+
+    if len(getNeedleImageIDs(getCaseDir(case)))-1 == 0:
+        # for cases with only 1 needle image, eg 154
+
+        nid = 0
+        import math
+        x1=float(xPositions[nid])
+        y1=float(yPositions[nid])
+        z1=float(xPositions[nid])
+        maxMotion3D = math.sqrt(x1*x1+y1*y1+z1*z1)
+        three_d_motion.append(maxMotion3D)
+        print '3DMotion nid = '+str(nid)
+        print str(three_d_motion)
+
+    else:
+        for nid in range(0,len(getNeedleImageIDs(getCaseDir(case)))-1):
+            #calculate 3D distances
+            import math
+
+            x1=float(xPositions[nid])
+            x2=float(xPositions[nid+1])
+
+            y1=float(yPositions[nid])
+            y2=float(yPositions[nid+1])
+
+            z1=float(xPositions[nid])
+            z2=float(xPositions[nid+1])
+
+            if nid == 0:
+                print 'IM HERE'
+                maxMotion3D = math.sqrt(x1*x1+y1*y1+z1*z1)
+                three_d_motion.append(maxMotion3D)
+                print '3DMotion nid = '+str(nid)
+                print str(three_d_motion)
+
+            else:
+                maxMotion3D = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1))
+                three_d_motion.append(maxMotion3D)
+                print '3DMotion nid = '+str(nid)
+                print str(three_d_motion)
+
+    print three_d_motion
+    print maxMotion3D
+    print case
+    maxMotion3D = max(three_d_motion)
+    print maxMotion3D
+    return maxMotion3D
+
+def calculateMaxMotionPerCase2DForCentroid_WITH_COMPENSATION(case):
+
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    maxMotionX = 0.0
+    maxMotionY = 0.0
+    maxMotionZ = 0.0
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            print splitted
+            print splitted[3]
+
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+            print splitted[5]
+
+
+    print 'x positions '
+    for i in range(0,len(xPositions)):
+        print xPositions[i]
+
+    print 'y positions '
+    for i in range(0,len(yPositions)):
+        print yPositions[i]
+
+    print 'z positions '
+    for i in range(0,len(zPositions)):
+        print zPositions[i]
+
+
+    # LOAD PELVIS POINTS
+
+    import string
+    dir = getMotionDirPelvis(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions_pelvis = []
+    yPositions_pelvis = []
+    zPositions_pelvis = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+
+            xPositions_pelvis.append(splitted[3])
+            yPositions_pelvis.append(splitted[4])
+            zPositions_pelvis.append(splitted[5])
+
+    print 'x positions _pelvis'
+    for i in range(0,len(xPositions_pelvis)):
+        print xPositions_pelvis[i]
+
+    print 'y positions _pelvis'
+    for i in range(0,len(yPositions_pelvis)):
+        print yPositions_pelvis[i]
+
+    print 'z positions _pelvis'
+    for i in range(0,len(zPositions_pelvis)):
+        print zPositions_pelvis[i]
+
+    for i in range(len(xPositions)):
+        xPositions[i]=float(xPositions[i])-float(xPositions_pelvis[i])
+        yPositions[i]=float(yPositions[i])-float(yPositions_pelvis[i])
+        zPositions[i]=float(zPositions[i])-float(zPositions_pelvis[i])
+
+    for nid in range(0,len(getNeedleImageIDs(getCaseDir(case)))-1):
+
+      if abs(maxMotionX) < abs(float(xPositions[nid+1])-float(xPositions[nid])):
+          maxMotionX = float(xPositions[nid+1])-float(xPositions[nid])
+
+      if abs(maxMotionY) < abs(float(yPositions[nid+1])-float(yPositions[nid])):
+          maxMotionY = float(yPositions[nid+1])-float(yPositions[nid])
+
+      if abs(maxMotionZ) < abs(float(zPositions[nid+1])-float(zPositions[nid])):
+          maxMotionZ = float(zPositions[nid+1])-float(zPositions[nid])
+
+
+    print 'maxMotionX : '+str(maxMotionX)
+    print 'maxMotionY : '+str(maxMotionY)
+    print 'maxMotionZ : '+str(maxMotionZ)
+
+    print 'DEBUG :: '
+    print zPositions
+
     return maxMotionX,maxMotionY,maxMotionZ
 
 def calculate2DXYMotionForTimePoint(case,nid):
@@ -997,7 +1399,6 @@ def calculate2DXYMotionForTimePoint(case,nid):
     xPositions = []
     yPositions = []
 
-
     # read x,y,z motion positions
     for line in f:
         line = line.rstrip('\n')
@@ -1005,120 +1406,81 @@ def calculate2DXYMotionForTimePoint(case,nid):
         xPositions.append(splitted[3])
         yPositions.append(splitted[4])
 
-    print 'x positions : '
-    print xPositions
-
-    print 'y positions : '
-    print yPositions
-
-
     if nid == getNeedleImageIDs(getCaseDir(case))[0]:
 
-        print 'if case entered'
+        #print 'if case entered'
 
         [x_1,y_1,z_1] = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv')
         x_2 = xPositions[0]
         y_2 = yPositions[0]
 
-        print 'nid : '+str(nid)
-        print 'x_1 :' +str(x_1)
-        print 'y_1 :' +str(y_1)
-        print 'x_2 :' +str(x_2)
-        print 'y_2 :' +str(y_2)
-        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
+        #print 'nid : '+str(nid)
+        #print 'x_1 :' +str(x_1)
+        #print 'y_1 :' +str(y_1)
+        #print 'x_2 :' +str(x_2)
+        #print 'y_2 :' +str(y_2)
+        #print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
 
         return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
 
     else:
 
-        print 'nid : '+str(nid)
+        #print 'nid : '+str(nid)
 
-        print 'array_position x1 : ' +str(int(getArrayPosFromNid(case,nid))-1)
-        print 'array_position x2 : ' +str(int(getArrayPosFromNid(case,nid)))
+        #print 'array_position x1 : ' +str(int(getArrayPosFromNid(case,nid))-1)
+        #print 'array_position x2 : ' +str(int(getArrayPosFromNid(case,nid)))
 
         x_1 = xPositions[int(getArrayPosFromNid(case,nid))-1]
         y_1 = yPositions[int(getArrayPosFromNid(case,nid))-1]
         x_2 = xPositions[int(getArrayPosFromNid(case,nid))]
         y_2 = yPositions[int(getArrayPosFromNid(case,nid))]
 
-        print 'x_1 :' +str(x_1)
-        print 'y_1 :' +str(y_1)
-        print 'x_2 :' +str(x_2)
-        print 'y_2 :' +str(y_2)
-        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
-
+        #print 'x_1 :' +str(x_1)
+        #print 'y_1 :' +str(y_1)
+        #print 'x_2 :' +str(x_2)
+        #print 'y_2 :' +str(y_2)
+        #print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
 
         return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
 
     print 'something went wrong with calculate2DXYMotionForTimePoint'
 
-def calculate2DXYMotionForTimePoint2(case,nid):
+def calculate3DXY_MAX_MotionForCase(case):
 
-    # this function calculates euclidean distance of the centroid between the needle image t(nid) and the t(nid-1) image
-
-    import string
-    dir = getMotionDir(case)
-    file = dir+'/motionsummary_centroid_label.txt'
-    f = open(file, 'rb')
+    # returns max(max(x,y,z))
 
     xPositions = []
     yPositions = []
+    zPositions = []
+
+    x,y,z = getXYZMotion_without_compensation(case,'centroid_label')
+    xPositions.append(x)
+    yPositions.append(y)
+    zPositions.append(z)
+
+    #print x,y,z
+
+    max = 0.0
+    max_x = 0.0
+    max_y = 0.0
+    max_z = 0.0
+
+    for i in range(len(xPositions)):
+        if xPositions[i] > max:
+            max_x = xPositions[i]
+        if yPositions[i] > max:
+            max_y = yPositions[i]
+        if zPositions[i] > max:
+            max_z = zPositions[i]
 
 
-    # read x,y,z motion positions
-    for line in f:
-        line = line.rstrip('\n')
-        splitted=string.split(str(line),',')
-        xPositions.append(splitted[3])
-        yPositions.append(splitted[4])
-
-    print 'x positions : '
-    print xPositions
-
-    print 'y positions : '
-    print yPositions
+    if max_x > max_y:
+        if max_y > max_z:
+            max = max_y
 
 
-    if nid == getNeedleImageIDs(getCaseDir(case))[0]:
+    return max
 
-        print 'if case entered'
-
-        [x_1,y_1,z_1] = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/centroid_label.fcsv')
-        x_2 = xPositions[0]
-        y_2 = yPositions[0]
-
-        print 'nid : '+str(nid)
-        print 'x_1 :' +str(x_1)
-        print 'y_1 :' +str(y_1)
-        print 'x_2 :' +str(x_2)
-        print 'y_2 :' +str(y_2)
-        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
-
-        #return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
-        return 0.0
-
-    else:
-
-        print 'nid : '+str(nid)
-
-        print 'array_position x1 : ' +str(int(getArrayPosFromNid(case,nid))-1)
-        print 'array_position x2 : ' +str(int(getArrayPosFromNid(case,nid)))
-
-        x_1 = xPositions[int(getArrayPosFromNid(case,nid))-1]
-        y_1 = yPositions[int(getArrayPosFromNid(case,nid))-1]
-        x_2 = xPositions[int(getArrayPosFromNid(case,nid))]
-        y_2 = yPositions[int(getArrayPosFromNid(case,nid))]
-
-        print 'x_1 :' +str(x_1)
-        print 'y_1 :' +str(y_1)
-        print 'x_2 :' +str(x_2)
-        print 'y_2 :' +str(y_2)
-        print 'distance : '+str(getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2)))
-
-
-        return getEuclidian2D(float(x_1),float(y_1),float(x_2),float(y_2))
-
-    print 'something went wrong with calculate2DXYMotionForTimePoint'
 
 def getArrayPosFromNid(case,nid):
 
@@ -1129,6 +1491,58 @@ def getArrayPosFromNid(case,nid):
       else:
           count = count+1
 
+def plot3DMaxMotion(listOfCaseIDs):
+
+    maxMotion3D = []
+
+    for case in listOfCaseIDs:
+      maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid(case))
+
+    import matplotlib.pyplot as plt
+    rect = plt.figure('MaxMotion_3D_without_compensation')
+    rect.set_facecolor('white')
+    plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
+    plt.title("3DMaxMotion")
+    plt.xlabel("motion in mm")
+    plt.ylabel("frequency")
+    plt.show()
+
+def plotMaximalMotionFromXYZcoordinates_NOT_COMPENSATED(listOfCaseIDs):
+
+    maxMotion_X = []
+    maxMotion_Y = []
+    maxMotion_Z = []
+
+    for case in listOfCaseIDs:
+      x,y,z = get3DMaxMotion(case)
+      maxMotion_X.append(x)
+      maxMotion_Y.append(y)
+      maxMotion_Z.append(z)
+
+    print 'LENGTH'
+    print len(maxMotion_X)
+
+    import matplotlib.pyplot as plt
+    rect = plt.figure('MaxMotion3D_without_compensation')
+    rect.set_facecolor('white')
+
+    import numpy as np
+
+    x_range = np.arange(0,255,1)
+
+    axes = plt.gca()
+    axes.set_xlim([0,255])
+    axes.set_ylim([0,40])
+    plt.plot(x_range,maxMotion_X)
+    plt.plot(x_range,maxMotion_Y)
+    plt.plot(x_range,maxMotion_Z)
+
+    plt.legend(['maxMotion_X', 'maxMotion_Y', 'maxMotion_Z'])
+
+    plt.title("max(x,y,z) motion per case")
+    plt.xlabel("case ID")
+    plt.ylabel("max(x,y,z) compensated")
+    plt.show()
 
 def plot2DMaxMotion(listOfCaseIDs):
 
@@ -1151,17 +1565,430 @@ def plot2DMaxMotion(listOfCaseIDs):
     plt.show()
     """
 
-    plt.figure(5)
+    plt.figure(7)
+
     plt.hexbin(maxMotionX, maxMotionY, mincnt=1,gridsize=25,cmap=plt.cm.YlOrRd_r)
-    rect = plt.figure(5)
+
+    rect = plt.figure(7)
     rect.set_facecolor('white')
-    plt.xlim([-15,15])
-    plt.ylim([-15,15])
+    #plt.xlim([-15,15])
+    #plt.ylim([-15,15])
     plt.xlabel('Left-Right Max Motion in mm')
     plt.ylabel('Up-Down Max Motion in mm')
     cb = plt.colorbar()
+    plt.axis([-15, 15, -15, 15])
     plt.show()
 
+def plot2DMaxMotion_WITH_COMPENSATION(listOfCaseIDs):
+
+    maxMotionX = []
+    maxMotionY = []
+
+    for case in listOfCaseIDs:
+      x,y,z = calculateMaxMotionPerCase2DForCentroid_WITH_COMPENSATION(case)
+      maxMotionX.append(x)
+      maxMotionY.append(y)
+
+    import matplotlib.pyplot as plt
+    """
+    plt.figure(5)
+    plt.plot(maxMotionX,maxMotionY,'bo')
+    rect = plt.figure(5)
+    rect.set_facecolor('white')
+    plt.xlabel('Left-Right Max Motion in mm')
+    plt.ylabel('Up-Down Max Motion in mm')
+    plt.show()
+    """
+
+    plt.figure(6)
+    plt.hexbin(maxMotionX, maxMotionY, mincnt=1,gridsize=20,cmap=plt.cm.YlOrRd_r)
+    rect = plt.figure(6)
+    rect.set_facecolor('white')
+    #plt.xlim([-15,15])
+    #plt.ylim([-15,15])
+    plt.xlabel('Left-Right Max Motion in mm')
+    plt.ylabel('Up-Down Max Motion in mm')
+    plt.axis([-8, 8, -15, 15])
+    cb = plt.colorbar()
+    plt.show()
+
+def plot3DMaxMotion(listOfCaseIDs):
+
+    maxMotionX = []
+    maxMotionY = []
+    maxMotionZ = []
+
+    for case in listOfCaseIDs:
+      x,y,z = get3DMaxMotion(case)
+      maxMotionX.append(x)
+      maxMotionY.append(y)
+
+    import matplotlib.pyplot as plt
+
+    plt.figure(6)
+    plt.plot(maxMotionX, maxMotionY, maxMotionZ)
+    rect = plt.figure(6)
+    rect.set_facecolor('white')
+    #plt.xlim([-15,15])
+    #plt.ylim([-15,15])
+    plt.xlabel('case')
+    plt.ylabel('max motion x,y,z compensated')
+    cb = plt.colorbar()
+    plt.show()
+
+def get3DMaxMotion(case):
+
+    print 'case  :   ' + str(case)
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            print splitted
+            print splitted[3]
+
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+            print splitted[5]
+
+
+    # LOAD PELVIS POINTS
+
+    import string
+    dir = getMotionDirPelvis(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions_pelvis = []
+    yPositions_pelvis = []
+    zPositions_pelvis = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+
+            xPositions_pelvis.append(splitted[3])
+            yPositions_pelvis.append(splitted[4])
+            zPositions_pelvis.append(splitted[5])
+
+
+    print xPositions
+    print yPositions
+    print zPositions
+
+    maxMotionX = max(xPositions)
+    maxMotionY = max(yPositions)
+    maxMotionZ = max(zPositions)
+
+    return maxMotionX,maxMotionY,maxMotionZ
+
+def getXYZMotion_without_compensation(case,target):
+
+    # this function returns 3 lists without motion vector for all needle images per case
+    # this function is not verified
+
+    print 'case  :   ' + str(case)
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_'+str(target)+'.txt'
+    f = open(file, 'rb')
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+
+    print max(xPositions)
+    return xPositions, yPositions, zPositions
+
+def getXYZMotion_with_compensation(case,target):
+
+    # this function returns 3 lists with compensated motion vector for all needle images per case
+    # this function is !verified!
+
+    print 'case  :   ' + str(case)
+    import string
+    dir = getMotionDir(case)
+    file = dir+'/motionsummary_'+str(target)+'.txt'
+    f = open(file, 'rb')
+
+    xPositions = []
+    yPositions = []
+    zPositions = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+            xPositions.append(splitted[3])
+            yPositions.append(splitted[4])
+            zPositions.append(splitted[5])
+
+    print 'z positions'
+    print zPositions
+    # LOAD PELVIS POINTS
+
+    dir = getMotionDirPelvis(case)
+    file = dir+'/motionsummary_centroid_label.txt'
+    f = open(file, 'rb')
+
+    xPositions_pelvis = []
+    yPositions_pelvis = []
+    zPositions_pelvis = []
+
+    # read x,y,z motion positions
+    for line in f:
+        if '__' in line:
+            break
+        else:
+            splitted=string.split(str(line),',')
+
+            xPositions_pelvis.append(splitted[3])
+            yPositions_pelvis.append(splitted[4])
+            zPositions_pelvis.append(splitted[5])
+
+    print 'pelvis z'
+    print zPositions_pelvis
+
+    for i in range(len(xPositions)):
+        xPositions[i]=float(xPositions[i])-float(xPositions_pelvis[i])
+        yPositions[i]=float(yPositions[i])-float(yPositions_pelvis[i])
+        zPositions[i]=float(zPositions[i])-float(zPositions_pelvis[i])
+
+    print 'compensated z'
+    print zPositions
+
+    return xPositions, yPositions, zPositions
+
+def plotMotionProbabilityOverTime2(listOfCaseIDs):
+
+    timepoints_x_axis = range(200)
+
+    import numpy as np
+    timepoints_x_axis=np.arange(0,200,1)
+
+    print timepoints_x_axis
+    #list1 = []
+    list2= []
+    list5= []
+    list10 = []
+    list20 = []
+
+    for timepoint in timepoints_x_axis:
+        list2.append(getMotionProbability_for3DXYZ_MaxMotion(listOfCaseIDs,timepoint,2))
+
+    for timepoint in timepoints_x_axis:
+        list5.append(getMotionProbability_for3DXYZ_MaxMotion(listOfCaseIDs,timepoint,5))
+
+    for timepoint in timepoints_x_axis:
+        list10.append(getMotionProbability_for3DXYZ_MaxMotion(listOfCaseIDs,timepoint,10))
+
+    for timepoint in timepoints_x_axis:
+        list20.append(getMotionProbability_for3DXYZ_MaxMotion(listOfCaseIDs,timepoint,20))
+
+    import matplotlib.pyplot as plt
+
+    rect = plt.figure('MaxMotion3DXYZ_with_compensation')
+    rect.set_facecolor('white')
+    #plt.plot(timepoints_x_axis,list1)
+    plt.plot(timepoints_x_axis,list2)
+    plt.plot(timepoints_x_axis,list5)
+    plt.plot(timepoints_x_axis,list10)
+    plt.plot(timepoints_x_axis,list20)
+    plt.legend(['motion exceeded 2mm', 'motion exceeded 5mm', 'motion exceeded 10mm', 'motion exceeded 20mm'])
+    plt.title("motion probability 3D XYZ with compensation")
+
+    axes = plt.gca()
+    axes.set_xlim([0,200])
+    axes.set_ylim([0,1])
+
+    plt.xlabel("procedure time")
+    plt.ylabel("probablity of motion exceetion")
+    plt.show()
+
+
+
+def plotMotionFromSingleCaseOverTime(listOfCaseIDs):
+
+    #listOfCaseIDs = [11,12,256]
+
+    for case in listOfCaseIDs:
+
+
+        list_of_times_in_minutes = []
+
+        for nid in getNeedleImageIDs(getCaseDir(case)):
+            list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+
+        import matplotlib.pyplot as plt
+
+        fig = plt.figure(4)
+        fig.set_facecolor('white')
+        yprops = dict(rotation=0,
+                     horizontalalignment='right',
+                     verticalalignment='center')
+
+        axprops = dict(yticks=[])
+        targets = ['centroid_label','centroid_base','centroid_apex','midgland_inferior','midgland_left','midgland_right','midgland_superior']
+
+        count = 0.0
+        axlist = []
+        for target in targets:
+            x,y,z = getXYZMotion_with_compensation(case,target)
+            ax = fig.add_axes([0.1, count, 0.8, 0.2], **axprops)
+            axlist.append(ax)
+            axprops['sharex'] = ax
+            axprops['sharey'] = ax
+            ax.plot(list_of_times_in_minutes, x)
+            ax.plot(list_of_times_in_minutes, y)
+            ax.plot(list_of_times_in_minutes, z)
+            ax.set_ylabel(target, **yprops)
+            count = count + 0.2
+
+        #turn off x ticklabels for all but the lower axes
+        for ax in axlist:
+          plt.setp(ax.get_xticklabels(), visible=False)
+
+        plt.show()
+
+
+
+
+
+
+
+def plotMotionProbabilityOverTime(listOfCaseIDs):
+
+    timepoints_x_axis = [20,25,28,30,40,45,50]
+    timepoints_x_axis = range(200)
+
+    import numpy as np
+    timepoints_x_axis=np.arange(0,10,0.01)
+
+    print timepoints_x_axis
+    motion_limits = [26]
+    list= []
+
+    for motion_limit in motion_limits:
+        list2 = []
+        for timepoint in timepoints_x_axis:
+            list.append(getMotionProbability_for2DEucledian(listOfCaseIDs,timepoint,motion_limit))
+        #list.append([list2])
+
+    print list
+
+    import matplotlib.pyplot as plt
+    plt.plot(timepoints_x_axis,list)
+    plt.ylabel('some numbers')
+    plt.show()
+
+def getMotionProbability_for2DEucledian(listOfCaseIDs, timepoint_x_axis, motion_limit):
+
+    valid_cases = 0
+    motion_exceed = 0
+    for case in listOfCaseIDs:
+
+      # Step. 1: get timepoints and 2DMaxMotion for timepoint
+
+      list_of_times_in_minutes = []
+      list_of_distances = []
+
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+      #print list_of_times_in_minutes
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_distances.append(float(calculate2DXYMotionForTimePoint(case,nid)))
+      #print list_of_distances
+
+      # calculate number of cases that have needle image in timepoint range:
+      for i in range(len(list_of_times_in_minutes)):
+          if list_of_times_in_minutes[i] < timepoint_x_axis:
+              valid_cases = valid_cases + 1
+              break
+
+      # calculate number of cases that exceeded motion within that timepoint range:
+      for i in range(len(list_of_times_in_minutes)):
+          if list_of_times_in_minutes[i] < timepoint_x_axis:
+              if list_of_distances[i] > motion_limit:
+                motion_exceed = motion_exceed + 1
+                break
+
+    print list_of_times_in_minutes
+    #print 'all cases with timepoint < '+str(timepoint_x_axis)+': '+str(valid_cases)
+    #print 'all cases with timepoint < '+str(timepoint_x_axis)+' and motion exceedion over '+str(motion_limit)+' : '+str(motion_exceed)
+    if float(valid_cases) == 0:
+        return 0
+    else:
+        probability = float(float(motion_exceed)/float(valid_cases))
+        return probability
+
+def getMaxMotionCoordinate(case,nid):
+
+    x,y,z = getXYZMotion_with_compensation(case,'centroid_label')
+
+def getMotionProbability_for3DXYZ_MaxMotion(listOfCaseIDs, timepoint_x_axis, motion_limit):
+
+    valid_cases = 0
+    motion_exceed = 0
+    for case in listOfCaseIDs:
+
+      # Step. 1: get timepoints and 3DMaxMotion for timepoint
+
+      list_of_times_in_minutes = []
+      list_of_distances = []
+
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+      #print list_of_times_in_minutes
+
+      list_of_distances = calculate3DXY_MAX_MotionForCase(case)
+      #print list_of_distances
+
+      # calculate number of cases that have needle image in timepoint range:
+      for i in range(len(list_of_times_in_minutes)):
+          if list_of_times_in_minutes[i] < timepoint_x_axis:
+              valid_cases = valid_cases + 1
+              break
+
+      # calculate number of cases that exceeded motion within that timepoint range:
+      for i in range(len(list_of_times_in_minutes)):
+          if list_of_times_in_minutes[i] < timepoint_x_axis:
+              if list_of_distances[i] > motion_limit:
+                motion_exceed = motion_exceed + 1
+                break
+
+    print 'all cases with timepoint < '+str(timepoint_x_axis)+': '+str(valid_cases)
+    print 'all cases with timepoint < '+str(timepoint_x_axis)+' and motion exceedion over '+str(motion_limit)+' : '+str(motion_exceed)
+    if float(valid_cases) == 0:
+        return 0
+    else:
+        probability = float(float(motion_exceed)/float(valid_cases))
+        return probability
 def plotMotionAsAFunctionOfTime(listOfCaseIDs):
 
 
@@ -1195,7 +2022,6 @@ def plotMotionAsAFunctionOfTime(listOfCaseIDs):
     plt.show()
 
 def plotMotionAsAFunctionOfTimeFromFirstNeedleImage(listOfCaseIDs):
-
 
     # get x axis
     list_of_times_in_minutes = []
@@ -1251,11 +2077,94 @@ def printListOfProstateVolumes(listOfCaseIDs):
             print size_in_mL
             """
 
-
 def deleteOldTransforms(dir):
     if dir:
         cmd = ("rm -rfv "+str(dir)+"/*")
         os.system(cmd)
+
+
+def plotLeftNumberOfNeedleImagesOverTime(listOfCaseIDs):
+
+
+    timepoints = range(0,200)
+    leftNeedleImages = []
+    needle_images_total = 0
+    for case in listOfCaseIDs:
+        for nid in getNeedleImageIDs(getCaseDir(case)):
+          needle_images_total = needle_images_total + 1
+
+    print 'total needle images : '+str(needle_images_total
+                                       )
+    for timepoint in timepoints:
+
+        left_images = 0
+        for case in listOfCaseIDs:
+
+          # Step. 1: get timepoints and 2DMaxMotion for timepoint
+
+          list_of_times_in_minutes = []
+
+          for nid in getNeedleImageIDs(getCaseDir(case)):
+            list_of_times_in_minutes.append(float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0))
+
+          # calculate number of cases that have needle image in timepoint range:
+          for i in range(len(list_of_times_in_minutes)):
+              if list_of_times_in_minutes[i] > timepoint:
+                  left_images = left_images + 1
+                  print left_images
+        leftNeedleImages.append(float(float(left_images)/float(needle_images_total)))
+
+    print leftNeedleImages
+
+    import matplotlib.pyplot as plt
+    rect = plt.figure('LeftNeedleImagesAtTimePoint t')
+    rect.set_facecolor('white')
+    #plt.plot(timepoints_x_axis,list1)
+    plt.plot(timepoints,leftNeedleImages)
+    plt.legend(['left needle images'])
+    plt.title("LeftNeedleImagesAtTimePoint")
+
+    #axes = plt.gca()
+    #axes.set_xlim([0,200])
+    #axes.set_ylim([0,1])
+
+    plt.xlabel("time in minutes")
+    plt.ylabel("left needle images")
+    plt.show()
+
+
+
+
+def plotMaximalMotionFromXYZ_coordinates_COMPENSATED_with_bars(listOfCaseIDs):
+
+    maxMotion = []
+
+    for case in listOfCaseIDs:
+
+      list = []
+      x,y,z=get3DMaxMotion(case)
+
+      print 'x = ' + str(x)
+      print y
+      print z
+
+      list.append(x)
+      list.append(y)
+      list.append(z)
+
+      print list
+
+      mm = 0
+      for i in list:
+          if i > mm:
+              mm = i
+
+      maxMotion.append(round(mm,4))
+
+    print 'len '
+    print len(maxMotion)
+    print maxMotion
+
 
 registrationCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSFit"
 resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BRAINSResample"
@@ -1272,35 +2181,44 @@ latestRigidTfm = '/Users/peterbehringer/MyStudies/InitialTransforms/Identity.h5'
 centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed'
 configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs'
 
-numberOfCases = 300
-listOfCaseIDs = []
-ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
 
 procedureTimesInSeconds = []
 
 # get list of cases
+numberOfCases = 300
+listOfCaseIDs = []
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
-# ignore cases
+# skip those
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+
+pelvisRegProbs = [18,23,28,29,32,33,40,42,43,46,47,66,67,76,80,81,83,91,97,99,107,108,112,114,115,
+                  118,119,127,146,150,151,153,164,168,185,186,189,202,214,219,228,245,246,253,256,
+                  262,268,272,273,290,295]
+
+ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,150,177,212,213,218,227,241,254,255,266,289,290]
+
+alreadyGotThose = range(0,124,1)
+
+# substract from list of cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-listOfCaseIDs = sorted(listOfCaseIDs)
-listOfCaseIDs = [124]
-
-print listOfCaseIDs
-
-# testing:
+listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
+#listOfCaseIDs=list(set(listOfCaseIDs) - set(alreadyGotThose))
 
 
 createFolders()
 list_of_columns = createListOfColumns()
 
+#listOfCaseIDs = [11,12]
 
+for case in listOfCaseIDs:
+    print case
 ################################
 # RUN prostate motion calculation
 
 # 0. create motion tracker points.py
 cmd = ('python createTrackers.py ')
-print ('about to run : '+cmd)
+#print ('about to run : '+cmd)
 #os.system(cmd)
 
 for case in listOfCaseIDs:
@@ -1318,26 +2236,26 @@ for case in listOfCaseIDs:
   needleImageIds = getNeedleImageIDs(IntraDir)
 
   # 0. Delete old transforms
-  deleteOldTransforms(regDir)
+  #deleteOldTransforms(regDir)
 
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
-  print ('about to run : '+cmd)
-  os.system(cmd)
+  #print ('about to run : '+cmd)
+  #os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
-  print ('about to run : '+cmd)
-  os.system(cmd)
+  #print ('about to run : '+cmd)
+  #os.system(cmd)
 
   # 4. transformCentroids
-  transformFiducials(needleImageIds,resDir,case)
+  #transformFiducials(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  createMotionSummary2(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  #createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 0. make snapshots and GIFs
@@ -1365,8 +2283,84 @@ for case in listOfCaseIDs:
 
 #plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIDs)
 
+#plotNumberOfTargets()
+
+# max eucledian 2D motion
+
 #plot2DMaxMotion(listOfCaseIDs)
+#plot2DMaxMotion_WITH_COMPENSATION(listOfCaseIDs)
+
+# max eucledian 3D motion
+
+#plot3DMaxMotion(listOfCaseIDs)
+#plot3DMaxMotion_WITH_COMPENSATION(listOfCaseIDs)
+
+# max(x,y,z) motion
+
+#_NOT_COMPENSATED(listOfCaseIDs)
+
+# not working:
+# plotMaximalMotionFromXYZ_coordinates_COMPENSATED_with_bars(listOfCaseIDs)
+
+# plot motion Probability
 
 #plotMotionAsAFunctionOfTime(listOfCaseIDs)
 
 #plotMotionAsAFunctionOfTimeFromFirstNeedleImage(listOfCaseIDs)
+
+#plotMotionProbabilityOverTime(listOfCaseIDs)
+
+#plotMotionProbabilityOverTime2(listOfCaseIDs)
+
+#plotLeftNumberOfNeedleImagesOverTime(listOfCaseIDs)
+
+#plotMaximalMotionFromXYZ_coordinates_COMPENSATED_with_bars(listOfCaseIDs)
+
+plotMotionFromSingleCaseOverTime(listOfCaseIDs)
+
+"""
+list_of_times_in_minutes = []
+
+xPositions = []
+yPositions = []
+zPositions = []
+
+for case in listOfCaseIDs:
+
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(round((float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0)),4))
+
+      x,y,z = getXYZMotion_with_compensation(case,'centroid_label')
+
+      for i in x:
+       xPositions.append(round(i,4))
+      for i in y:
+       yPositions.append(round(i,4))
+      for i in z:
+       zPositions.append(round(i,4))
+
+
+
+print list_of_times_in_minutes
+print '_____________________________________________________________________________________________________'
+print xPositions
+print '_____________________________________________________________________________________________________'
+print yPositions
+print '_____________________________________________________________________________________________________'
+print zPositions
+"""
+
+max = []
+
+for case in listOfCaseIDs:
+
+    m = calculate3DXY_MAX_MotionForCase(case)
+    print m
+    max.append(m)
+
+print 'HALLO?'
+print 'len = '+str(len(max))
+for i in range(len(max)):
+    print max[i]
+
+

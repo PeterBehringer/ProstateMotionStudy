@@ -50,7 +50,26 @@ def getListOfCaseIDs(numberOfCases):
 #listOfCaseIDs=list(set(listOfCaseIDs) - set(alreadyGotThose))
 #listOfCaseIDs = sorted(listOfCaseIDs)
 
-listOfCaseIDs = [66,124]
+numberOfCases = 300
+listOfCaseIDs = []
+ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+
+pelvisRegProbs = [18,23,28,29,32,33,40,42,43,46,47,66,67,76,80,81,83,91,97,99,107,108,112,114,115,
+                  118,119,127,146,150,151,153,164,168,185,186,189,202,214,219,228,245,246,253,256,
+                  262,268,272,273,290,295]
+
+ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,150,177,212,213,218,227,241,254,255,266,289,290]
+
+
+# get list of cases
+listOfCaseIDs = getListOfCaseIDs(numberOfCases)
+
+# ignore cases
+listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
+#listOfCaseIDs=list(set(listOfCaseIDs) - set(pelvisRegProbs))
+listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
+
+print listOfCaseIDs
 print listOfCaseIDs
 
 #listOfCaseIDs = [268,270,271]
@@ -74,7 +93,7 @@ def getNeedleImageIDs(IntraDir):
 # execfile ('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/scripts/makeSnapshots.py')
 # to launch it. Also, make sure that VisAIRe is installed as a module and open!
 
-"""
+
 for case in listOfCaseIDs:
 
     print 'NEW CASE ******************************************************'
@@ -92,14 +111,14 @@ for case in listOfCaseIDs:
     # hit "make snapshots"
     slicer.modules.VisAIReWidget.onMakeSnapshots()
 
-"""
+
 import sys, glob, string, os, re
 
 # read all snapshot files
 # for each case key, sort the files
 # take pairs that have the same needle id, coombine into gif
 
-inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots/'
+inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots123/'
 outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs/'
 
 inputFiles = glob.glob(inputDir+'/*png')

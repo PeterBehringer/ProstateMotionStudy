@@ -166,8 +166,15 @@ def transformFiducialsPelvis(needleImageIds,ResDir,case):
       fixedImage = IntraDir+'/'+nidStr+'-Needle.nrrd'
 
       # check if there is a matching TG
-      transformDir = getTransformDir(case)+'/IntraopImages'
-      bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
+      initTfm = IntraDir+nidStr+'-init.h5'
+
+      if os.path.isfile(initTfm):
+          bsplineTfm = initTfm
+      else:
+          transformDir = getTransformDir(case)+'/IntraopImages'
+          bsplineTfm = transformDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
+
+
       #print ('bsplineTfm'+str(bsplineTfm))
 
       if not os.path.isfile(bsplineTfm):
@@ -545,13 +552,18 @@ def makeConfig(case,caseDir,needleImageIDs,RegDir,ResDir):
       nidStr=str(nid)
       cf.set('RegisteredData','Image'+nidStr,os.path.join(os.path.abspath(ResDir),nidStr+'-Rigid_resampled.nrrd'))
       # TODO: add transformations
-      tfmFile1 = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
-      tfmFile2 = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
+      tfmFileInit = IntraDir+nidStr+'-init.h5'
+      tfmFile1 = RegDir+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
+      tfmFile2 = RegDir+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
 
       print tfmFile1
       print tfmFile2
+      print tfmFileInit
 
-      if os.path.exists(tfmFile1):
+      if os.path.exists(tfmFileInit):
+        print 'i am existing'
+        cf.set('RegisteredData','Transform'+nidStr,os.path.abspath(tfmFileInit))
+      elif os.path.exists(tfmFile1):
         cf.set('RegisteredData','Transform'+nidStr,os.path.abspath(tfmFile1))
       elif os.path.exists(tfmFile2):
         cf.set('RegisteredData','Transform'+nidStr,os.path.abspath(tfmFile2))
@@ -595,12 +607,22 @@ configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pe
 numberOfCases = 300
 listOfCaseIDs = []
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+
+pelvisRegProbs = [18,23,28,29,32,33,40,42,43,46,47,66,67,76,80,81,83,91,97,99,107,108,112,114,115,
+                  118,119,127,146,150,151,153,164,168,185,186,189,202,214,219,228,245,246,253,256,
+                  262,268,272,273,290,295]
+
+ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,150,177,212,213,218,227,241,254,255,266,289,290]
+
+
+
 # get list of cases
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
 # ignore cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-
+#listOfCaseIDs=list(set(listOfCaseIDs) - set(pelvisRegProbs))
+listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
 
 print listOfCaseIDs
 
@@ -637,23 +659,21 @@ for case in listOfCaseIDs:
   needleImageIds = getNeedleImageIDs(IntraDir)
 
 
-
-
   # 1. registerCase.py
   cmd = ('python pelvis_registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   #print ('about to run : '+cmd)
-  os.system(cmd)
+  #os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python pelvis_resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
   #print ('about to run : '+cmd)
-  os.system(cmd)
+  #os.system(cmd)
 
   # 4. transformCentroids
-  transformFiducialsPelvis(needleImageIds,resDir,case)
+  #transformFiducialsPelvis(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
   createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)

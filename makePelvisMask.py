@@ -70,25 +70,31 @@ for case in listOfCaseIDs:
 
   for label in labelList:
 
-      inputLabel = sitk.ReadImage(IntraDir+'/'+str(label))
-      outputLabel = IntraDir+'/'+str(label[:-5])+'-Pelvis.nrrd'
+      if "Pelvis-Pelvis" in label:
+          continue
 
-      changeFilter = sitk.ChangeLabelImageFilter()
-      changeMap = sitk.DoubleDoubleMap()
+      else:
+          inputLabel = sitk.ReadImage(IntraDir+'/'+str(label))
+          outputLabel = IntraDir+'/'+str(label[:-5])+'-Pelvis.nrrd'
 
-      # get the label value
+          changeFilter = sitk.ChangeLabelImageFilter()
+          changeMap = sitk.DoubleDoubleMap()
 
-      stats = sitk.LabelShapeStatisticsImageFilter()
-      stats.Execute(inputLabel)
-      labels=stats.GetLabels()
-      label = labels[0]
+          # get the label value
 
-      changeMap[0] = 1
-      changeMap[int(label)] = 0
+          stats = sitk.LabelShapeStatisticsImageFilter()
+          stats.Execute(inputLabel)
+          labels=stats.GetLabels()
+          label = labels[0]
 
-      changedLabel = changeFilter.Execute(inputLabel, changeMap)
-      sitk.WriteImage(changedLabel, outputLabel, True)
+          changeMap[0] = 1
+          changeMap[int(label)] = 0
+
+          changedLabel = changeFilter.Execute(inputLabel, changeMap)
+          sitk.WriteImage(changedLabel, outputLabel, True)
 
   print(str(case)+' done')
+
+
 
 

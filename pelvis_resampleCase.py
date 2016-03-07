@@ -96,6 +96,14 @@ for nid in needleImageIds:
 
   bsplineTfm = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
 
+  initTfm = IntraDir+nidStr+"-init.h5"
+
+  if os.path.isfile(initTfm):
+    bsplineTfm = initTfm
+  else:
+    bsplineTfm = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
+
+
   print ' directory '
   print str(bsplineTfm)
 

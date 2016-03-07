@@ -59,7 +59,6 @@ def BFResample(reference,moving,tfm,output,interp='Linear'):
     exit()
 
 def IsBSplineTfmValid(tfm):
-
   import h5py
   f=h5py.File(tfm,'r')
   transformType=f["TransformGroup/2/TransformType"]
@@ -191,6 +190,8 @@ for nid in needleImageIds:
   #fixedMask2 = '/Users/peterbehringer/MyTesting/ProjectWeek15/Data/masks/15_12-Resampled-CoverProstate-TG_bigger_mask_without_cutting.nrrd'
   #fixedMask2 = '/Users/peterbehringer/MyTesting/ProjectWeek15/Data/masks/25_8-Resampled-CoverProstate-TG_bigger.nrrd'
   #fixedMask2 = '/Users/peterbehringer/MyTesting/ProjectWeek15/Data/TempDir/15_18-Dilated_Resampled-CoverProstate-TG.nrrd'
+
+
   if not os.path.isfile(fixedMask):
     bsplineTfm = RegDir+nidStr+'-IntraIntra-BSpline-Attempt1.h5'
     rigidTfm = RegDir+nidStr+'-IntraIntra-Rigid-Attempt1.h5'
@@ -209,9 +210,13 @@ for nid in needleImageIds:
     # since we have only one mask, we cannot use a smarter initialization procedure
     startTime = time()
     # rigid
-    BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
-    # affine
-    # BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,affineTfm=affineTfm,initTfm=rigidTfm,log=log)
+    print IntraDir
+    initTfm = IntraDir+nidStr+'-init.h5'
+
+    if os.path.isfile(initTfm):
+       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
+    else:
+       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
 
     # create bigger mask
     #dilateMask(fixedMask,fixedMask_dilated)
@@ -229,11 +234,14 @@ for nid in needleImageIds:
     bsplineTfm = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
     rigidTfm = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
     affineTfm = RegDir+'/'+nidStr+'-IntraIntra-Affine-Attempt2.h5'
-    initTfm = RegDir+'/'+nidStr+'-IntraIntra-Init-Attempt2.h5'
+    initTfm = IntraDir+nidStr+'-init.h5'
     startTime = time()
     # rigid
     print ('fixed Mask = '+fixedMask)
-    BFRegister(fixed=fixedImage,moving=movingImage,movingMask=movingMask,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log)
+    if os.path.isfile(initTfm):
+       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
+    else:
+       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
     # affine
     # BFRegister(fixed=fixedImage,moving=movingImage,movingMask=movingMask,fixedMask=fixedMask,affineTfm=affineTfm,log=log)
     # bspline
@@ -241,16 +249,15 @@ for nid in needleImageIds:
     #BFRegister(fixed=fixedImage,moving=movingImage,movingMask=movingMask,fixedMask=fixedMask,bsplineTfm=bsplineTfm,log=log,initialTfm=rigidTfm)
     # BFRegister(fixed=fixedImage,moving=movingImage,movingMask=movingMask,fixedMask=fixedMask,rigidTfm=rigidTfm,bsplineTfm=bsplineTfm,log=log,initTfm=initTfm)
     print 'latest BSpline transform path in else case: '+str(bsplineTfm)
-
-
-
     endTime = time()
     attempt='Attempt1'
 
   print ('DEBUG: latestRigidTfm')
   print rigidTfm
-
-  latestRigidTfm = rigidTfm
+  if os.path.isfile(initTfm):
+    latestRigidTfm = initTfm
+  else:
+    latestRigidTfm = rigidTfm
   """
   success = success or IsBSplineTfmValid(bsplineTfm)
   if not success:
