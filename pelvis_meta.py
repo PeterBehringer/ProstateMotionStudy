@@ -269,12 +269,12 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           #print 'nidPosition[0]'+str(nidPosition[0])
           #print 'initialPosition[0]'+str(initialPosition[0])
 
-          summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2])))
+          summary.append([case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]])
+          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(nidPosition[0]-initialPosition[0])+','+str(nidPosition[1]-initialPosition[1])+','+str(nidPosition[2]-initialPosition[2]))
           f.write('\n')
-          x = abs(nidPosition[0]-initialPosition[0])
-          y = abs(nidPosition[1]-initialPosition[1])
-          z = abs(nidPosition[2]-initialPosition[2])
+          x = nidPosition[0]-initialPosition[0]
+          y = nidPosition[1]-initialPosition[1]
+          z = nidPosition[2]-initialPosition[2]
 
           appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
 

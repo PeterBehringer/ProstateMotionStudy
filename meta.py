@@ -280,13 +280,13 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           #print 'nidPosition[0]'+str(nidPosition[0])
           #print 'initialPosition[0]'+str(initialPosition[0])
 
-          summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2]))+','+'\n')
+          summary.append([case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]])
+          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(nidPosition[0]-initialPosition[0])+','+str(nidPosition[1]-initialPosition[1])+','+str(nidPosition[2]-initialPosition[2])+','+'\n')
 
 
-          x = abs(nidPosition[0]-initialPosition[0])
-          y = abs(nidPosition[1]-initialPosition[1])
-          z = abs(nidPosition[2]-initialPosition[2])
+          x = nidPosition[0]-initialPosition[0]
+          y = nidPosition[1]-initialPosition[1]
+          z = nidPosition[2]-initialPosition[2]
 
           appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
 
@@ -317,99 +317,162 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
 
         #f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
 
-def createMotionSummary2(case,motionDir,centroidDir,needleImageIDs,listOfColumns):
 
-    try:
-      os.makedirs(motionDir)
-    except:
-      pass
+def getNameOfList(index):
 
-    listOfTargetsToBeTransformed = ['centroid_apex',
-                                    'centroid_base',
-                                    'centroid_label',
-                                    'midgland_inferior',
-                                    'midgland_left',
-                                    'midgland_right',
-                                    'midgland_superior']
+    if index == 0:
+        return 'excel_column_APEX_x'
+    if index == 1:
+        return 'excel_column_APEX_y'
+    if index == 2:
+        return 'excel_column_APEX_z'
+    if index == 3:
+        return 'excel_column_BASE_x'
+    if index == 4:
+        return 'excel_column_BASE_y'
+    if index == 5:
+        return 'excel_column_BASE_z'
+    if index == 6:
+        return 'excel_column_LABEL_x'
+    if index == 7:
+        return 'excel_column_LABEL_y'
+    if index == 8:
+        return 'excel_column_LABEL_z'
+    if index == 9:
+        return 'excel_column_INFERIOR_x'
+    if index == 10:
+        return 'excel_column_INFERIOR_y'
+    if index == 11:
+        return 'excel_column_INFERIOR_z'
+    if index == 12:
+        return 'excel_column_LEFT_x'
+    if index == 13:
+        return 'excel_column_LEFT_y'
+    if index == 14:
+        return 'excel_column_LEFT_z'
+    if index == 15:
+        return 'excel_column_RIGHT_x'
+    if index == 16:
+        return 'excel_column_RIGHT_y'
+    if index == 17:
+        return 'excel_column_RIGHT_z'
+    if index == 18:
+        return 'excel_column_SUPERIOR_x'
+    if index == 19:
+        return 'excel_column_SUPERIOR_y'
+    if index == 20:
+        return 'excel_column_SUPERIOR_z'
+
+def appendToExcelColumn(targetToBeTransformed,x,y,z,listOfColumns):
+
+        excel_column_APEX_x = listOfColumns[0]
+        excel_column_APEX_y = listOfColumns[1]
+        excel_column_APEX_z = listOfColumns[2]
+        excel_column_BASE_x = listOfColumns[3]
+        excel_column_BASE_y = listOfColumns[4]
+        excel_column_BASE_z = listOfColumns[5]
+        excel_column_LABEL_x = listOfColumns[6]
+        excel_column_LABEL_y = listOfColumns[7]
+        excel_column_LABEL_z = listOfColumns[8]
+        excel_column_INFERIOR_x = listOfColumns[9]
+        excel_column_INFERIOR_y = listOfColumns[10]
+        excel_column_INFERIOR_z = listOfColumns[11]
+        excel_column_LEFT_x = listOfColumns[12]
+        excel_column_LEFT_y = listOfColumns[13]
+        excel_column_LEFT_z = listOfColumns[14]
+        excel_column_RIGHT_x = listOfColumns[15]
+        excel_column_RIGHT_y = listOfColumns[16]
+        excel_column_RIGHT_z = listOfColumns[17]
+        excel_column_SUPERIOR_x = listOfColumns[18]
+        excel_column_SUPERIOR_y = listOfColumns[19]
+        excel_column_SUPERIOR_z = listOfColumns[20]
 
 
+        if targetToBeTransformed == 'centroid_apex':
+            excel_column_APEX_x.append(x)
+            excel_column_APEX_y.append(y)
+            excel_column_APEX_z.append(z)
+        if targetToBeTransformed == 'centroid_base':
+            excel_column_BASE_x.append(x)
+            excel_column_BASE_y.append(y)
+            excel_column_BASE_z.append(z)
+        if targetToBeTransformed == 'centroid_label':
+            excel_column_LABEL_x.append(x)
+            excel_column_LABEL_y.append(y)
+            excel_column_LABEL_z.append(z)
+        if targetToBeTransformed == 'midgland_inferior':
+            excel_column_INFERIOR_x.append(x)
+            excel_column_INFERIOR_y.append(y)
+            excel_column_INFERIOR_z.append(z)
+        if targetToBeTransformed == 'midgland_right':
+            excel_column_RIGHT_x.append(x)
+            excel_column_RIGHT_y.append(y)
+            excel_column_RIGHT_z.append(z)
+        if targetToBeTransformed == 'midgland_left':
+            excel_column_LEFT_x.append(x)
+            excel_column_LEFT_y.append(y)
+            excel_column_LEFT_z.append(z)
+        if targetToBeTransformed == 'midgland_superior':
+            excel_column_SUPERIOR_x.append(x)
+            excel_column_SUPERIOR_y.append(y)
+            excel_column_SUPERIOR_z.append(z)
 
-    for nid in needleImageIds:
+def createListOfColumns():
 
-        nidTime = ReadNeedleTime(case,nid)
-        initialTime = ReadInitialTime(case)
-        passedTime = str(nidTime - initialTime)
+    list_of_columns = []
 
-        #print ReadInitialTime(case)
-        #print nidTime
-        print passedTime
+    excel_column_APEX_x = []
+    excel_column_APEX_y = []
+    excel_column_APEX_z = []
 
-"""
+    excel_column_BASE_x = []
+    excel_column_BASE_y = []
+    excel_column_BASE_z = []
 
-    for i in range(0,len(listOfTargetsToBeTransformed)):
-        #print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
-        dir = motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt'
-        cmd='touch '+ str(dir)
-        #print dir
-        os.system(cmd)
+    excel_column_LABEL_x = []
+    excel_column_LABEL_y = []
+    excel_column_LABEL_z = []
 
-        f = open(dir, 'w')
-        #f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
-        summary=[]
-        for nid in needleImageIds:
+    excel_column_INFERIOR_x = []
+    excel_column_INFERIOR_y = []
+    excel_column_INFERIOR_z = []
 
-          nidTime = ReadNeedleTime(case,nid)
-          initialTime = ReadInitialTime(case)
+    excel_column_LEFT_x = []
+    excel_column_LEFT_y = []
+    excel_column_LEFT_z = []
 
-          #print nidTime
+    excel_column_RIGHT_x = []
+    excel_column_RIGHT_y = []
+    excel_column_RIGHT_z = []
 
-          resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed/Case'+str(case)+\
-                      '/'+str(nid)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
+    excel_column_SUPERIOR_x = []
+    excel_column_SUPERIOR_y = []
+    excel_column_SUPERIOR_z = []
 
-          initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
 
-          nidPosition = ReadFiducial(resampled)
+    list_of_columns.append(excel_column_APEX_x)
+    list_of_columns.append(excel_column_APEX_y)
+    list_of_columns.append(excel_column_APEX_z)
+    list_of_columns.append(excel_column_BASE_x)
+    list_of_columns.append(excel_column_BASE_y)
+    list_of_columns.append(excel_column_BASE_z)
+    list_of_columns.append(excel_column_LABEL_x)
+    list_of_columns.append(excel_column_LABEL_y)
+    list_of_columns.append(excel_column_LABEL_z)
+    list_of_columns.append(excel_column_INFERIOR_x)
+    list_of_columns.append(excel_column_INFERIOR_y)
+    list_of_columns.append(excel_column_INFERIOR_z)
+    list_of_columns.append(excel_column_LEFT_x)
+    list_of_columns.append(excel_column_LEFT_y)
+    list_of_columns.append(excel_column_LEFT_z)
+    list_of_columns.append(excel_column_RIGHT_x)
+    list_of_columns.append(excel_column_RIGHT_y)
+    list_of_columns.append(excel_column_RIGHT_z)
+    list_of_columns.append(excel_column_SUPERIOR_x)
+    list_of_columns.append(excel_column_SUPERIOR_y)
+    list_of_columns.append(excel_column_SUPERIOR_z)
 
-          #print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
-          #print 'nidPosition[0]'+str(nidPosition[0])
-          #print 'initialPosition[0]'+str(initialPosition[0])
-
-          summary.append([case,nid,nidTime-initialTime,abs(nidPosition[0]-initialPosition[0]),abs(nidPosition[1]-initialPosition[1]),abs(nidPosition[2]-initialPosition[2])])
-          f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(abs(nidPosition[0]-initialPosition[0]))+','+str(abs(nidPosition[1]-initialPosition[1]))+','+str(abs(nidPosition[2]-initialPosition[2])))
-          f.write('\n')
-          x = abs(nidPosition[0]-initialPosition[0])
-          y = abs(nidPosition[1]-initialPosition[1])
-          z = abs(nidPosition[2]-initialPosition[2])
-
-          appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
-
-          #print nidTime-initialTime
-"""
-"""
-        f.write("\n"+"_____________________________________")
-        #print '_______'
-        #print summary
-
-        avgX = 0
-        avgY = 0
-        avgZ = 0
-
-        for i in range(0,len(needleImageIds)):
-          avgX =avgX+summary[i][3]
-          avgY =avgY+summary[i][4]
-          avgZ =avgZ+summary[i][5]
-
-        avgX=avgX/len(needleImageIds)
-        avgY=avgY/len(needleImageIds)
-        avgZ=avgZ/len(needleImageIds)
-
-        #print avgX
-        #print avgY
-        #print avgZ
-
-        f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
-"""
-
+    return list_of_columns
 
 def printListOfColumns(list_of_columns):
 
@@ -846,7 +909,6 @@ def plotNumberOfNeedleImagesPerCase_withColomns(listOfCaseIds):
 
 def calculateMaxMotionPerCase3DForCentroid(case):
 
-
     # this is eucledian distance
 
 
@@ -953,11 +1015,9 @@ def calculateMaxMotionPerCase2DForCentroid(case):
 
     maxMotionX = 0.0
     maxMotionY = 0.0
-    maxMotionZ = 0.0
 
     xPositions = []
     yPositions = []
-    zPositions = []
 
     # read x,y,z motion positions
     for line in f:
@@ -970,7 +1030,6 @@ def calculateMaxMotionPerCase2DForCentroid(case):
 
             xPositions.append(splitted[3])
             yPositions.append(splitted[4])
-            zPositions.append(splitted[5])
             print splitted[5]
 
 
@@ -982,9 +1041,6 @@ def calculateMaxMotionPerCase2DForCentroid(case):
     for i in range(0,len(yPositions)):
         print yPositions[i]
 
-    print 'z positions '
-    for i in range(0,len(zPositions)):
-        print zPositions[i]
 
     for nid in range(0,len(getNeedleImageIDs(getCaseDir(case)))-1):
 
@@ -994,18 +1050,14 @@ def calculateMaxMotionPerCase2DForCentroid(case):
       if abs(maxMotionY) < abs(float(yPositions[nid+1])-float(yPositions[nid])):
           maxMotionY = float(yPositions[nid+1])-float(yPositions[nid])
 
-      if abs(maxMotionZ) < abs(float(zPositions[nid+1])-float(zPositions[nid])):
-          maxMotionZ = float(zPositions[nid+1])-float(zPositions[nid])
 
 
     print 'maxMotionX : '+str(maxMotionX)
     print 'maxMotionY : '+str(maxMotionY)
-    print 'maxMotionZ : '+str(maxMotionZ)
 
     print 'DEBUG :: '
-    print zPositions
 
-    return maxMotionX,maxMotionY,maxMotionZ
+    return maxMotionX,maxMotionY
 
 def calculateMaxMotionPerCase3DForCentroid_WITH_COMPENSATION(case):
 
@@ -1327,7 +1379,6 @@ def calculate3DXY_MAX_MotionForCase(case):
 
     return max
 
-
 def getArrayPosFromNid(case,nid):
 
   count = 0
@@ -1337,21 +1388,69 @@ def getArrayPosFromNid(case,nid):
       else:
           count = count+1
 
-def plot3DMaxMotion(listOfCaseIDs):
+def plot3DEucledianMaxMotion(listOfCaseIDs, compensation = None):
 
-    maxMotion3D = []
+    if compensation == False:
+        maxMotion3D = []
 
-    for case in listOfCaseIDs:
-      maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid(case))
+        for case in listOfCaseIDs:
+          maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid(case))
 
-    import matplotlib.pyplot as plt
-    rect = plt.figure('MaxMotion_3D_without_compensation')
-    rect.set_facecolor('white')
-    plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
-    plt.title("3DMaxMotion")
-    plt.xlabel("motion in mm")
-    plt.ylabel("frequency")
-    plt.show()
+        import matplotlib.pyplot as plt
+        rect = plt.figure('MaxMotion_3D_without_compensation')
+        rect.set_facecolor('white')
+        plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
+        plt.title("uncompensated 3DMaxMotion")
+        plt.xlabel("motion in mm")
+        plt.ylabel("frequency")
+        plt.show()
+
+    if compensation == True:
+        maxMotion3D = []
+
+        for case in listOfCaseIDs:
+          maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid_WITH_COMPENSATION(case))
+
+        import matplotlib.pyplot as plt
+        rect = plt.figure('MaxMotion_3D_with_compensation')
+        rect.set_facecolor('white')
+        plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
+        plt.title("compensated 3DMaxMotion")
+        plt.xlabel("motion in mm")
+        plt.ylabel("frequency")
+        plt.show()
+
+def plot2DEucledianMaxMotion(listOfCaseIDs, compensation = None):
+
+    if compensation == False:
+        maxMotion3D = []
+
+        for case in listOfCaseIDs:
+          maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid(case))
+
+        import matplotlib.pyplot as plt
+        rect = plt.figure('MaxMotion_3D_without_compensation')
+        rect.set_facecolor('white')
+        plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
+        plt.title("uncompensated 3DMaxMotion")
+        plt.xlabel("motion in mm")
+        plt.ylabel("frequency")
+        plt.show()
+
+    if compensation == True:
+        maxMotion3D = []
+
+        for case in listOfCaseIDs:
+          maxMotion3D.append(calculateMaxMotionPerCase3DForCentroid_WITH_COMPENSATION(case))
+
+        import matplotlib.pyplot as plt
+        rect = plt.figure('MaxMotion_3D_with_compensation')
+        rect.set_facecolor('white')
+        plt.hist(maxMotion3D,bins=35,range=[0.0, 15],color='black',histtype='step')
+        plt.title("compensated 3DMaxMotion")
+        plt.xlabel("motion in mm")
+        plt.ylabel("frequency")
+        plt.show()
 
 def plotMaximalMotionFromXYZcoordinates_NOT_COMPENSATED(listOfCaseIDs):
 
@@ -1455,30 +1554,6 @@ def plot2DMaxMotion_WITH_COMPENSATION(listOfCaseIDs):
     plt.xlabel('Left-Right Max Motion in mm')
     plt.ylabel('Up-Down Max Motion in mm')
     plt.axis([-8, 8, -15, 15])
-    cb = plt.colorbar()
-    plt.show()
-
-def plot3DMaxMotion(listOfCaseIDs):
-
-    maxMotionX = []
-    maxMotionY = []
-    maxMotionZ = []
-
-    for case in listOfCaseIDs:
-      x,y,z = get3DMaxMotion(case)
-      maxMotionX.append(x)
-      maxMotionY.append(y)
-
-    import matplotlib.pyplot as plt
-
-    plt.figure(6)
-    plt.plot(maxMotionX, maxMotionY, maxMotionZ)
-    rect = plt.figure(6)
-    rect.set_facecolor('white')
-    #plt.xlim([-15,15])
-    #plt.ylim([-15,15])
-    plt.xlabel('case')
-    plt.ylabel('max motion x,y,z compensated')
     cb = plt.colorbar()
     plt.show()
 
@@ -1721,11 +1796,6 @@ def plotMotionFromSingleCaseOverTime(listOfCaseIDs):
           plt.setp(ax.get_xticklabels(), visible=False)
 
         plt.show()
-
-
-
-
-
 
 
 def plotMotionProbabilityOverTime(listOfCaseIDs):
@@ -2044,8 +2114,6 @@ pelvisRegProbs = [18,23,28,29,32,33,40,42,43,46,47,66,67,76,80,81,83,91,97,99,10
 
 ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,150,177,212,213,218,227,241,254,255,266,289,290]
 
-alreadyGotThose = range(0,124,1)
-
 # substract from list of cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
@@ -2101,7 +2169,7 @@ for case in listOfCaseIDs:
   #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  #createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 0. make snapshots and GIFs
@@ -2113,7 +2181,7 @@ for case in listOfCaseIDs:
 #printListOfProstateVolumes(listOfCaseIDs)
 
 # 7. print Motion for Excel
-#printListOfColumns(list_of_columns)
+printListOfColumns(list_of_columns)
 
 # 9. print Pelvis Motion
 #printPelvisMotion(listOfCaseIDs)
@@ -2138,8 +2206,8 @@ for case in listOfCaseIDs:
 
 # max eucledian 3D motion
 
-#plot3DMaxMotion(listOfCaseIDs)
-#plot3DMaxMotion_WITH_COMPENSATION(listOfCaseIDs)
+#plot3DEucledianMaxMotion(listOfCaseIDs,compensation = False)
+#plot3DEucledianMaxMotion(listOfCaseIDs,compensation = True)
 
 # max(x,y,z) motion
 
@@ -2162,6 +2230,36 @@ for case in listOfCaseIDs:
 
 #plotMaximalMotionFromXYZ_coordinates_COMPENSATED_with_bars(listOfCaseIDs)
 
-plotMotionFromSingleCaseOverTime(listOfCaseIDs)
+#plotMotionFromSingleCaseOverTime(listOfCaseIDs)
+
+"""
+list_of_times_in_minutes = []
+
+xPositions = []
+yPositions = []
+zPositions = []
+
+for case in listOfCaseIDs:
+
+      for nid in getNeedleImageIDs(getCaseDir(case)):
+        list_of_times_in_minutes.append(round((float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0)),4))
+
+      x,y,z = getXYZMotion_with_compensation(case,'centroid_label')
+
+      for i in x:
+       xPositions.append(round(i,4))
+      for i in y:
+       yPositions.append(round(i,4))
+      for i in z:
+       zPositions.append(round(i,4))
 
 
+
+print list_of_times_in_minutes
+print '_____________________________________________________________________________________________________'
+print xPositions
+print '_____________________________________________________________________________________________________'
+print yPositions
+print '_____________________________________________________________________________________________________'
+print zPositions
+"""
