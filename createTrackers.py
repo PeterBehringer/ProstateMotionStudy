@@ -211,7 +211,6 @@ for case in listOfCaseIDs:
     # 1. create centroid for label
     createLabelCentroid(maskDir,centroid0Dir)
 
-    #print '1 through'
     # 2. create centroid apex and base
     first,last=findFirstAndLastLabelSlices(maskDir,getLabelID(maskDir))
 

@@ -676,10 +676,9 @@ for case in listOfCaseIDs:
   #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
-  createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
+  #createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)
 
 
 # 7. print Motion for Excel
-printListOfColumns(list_of_columns)
-
+#printListOfColumns(list_of_columns)
 

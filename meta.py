@@ -169,6 +169,21 @@ def transformFiducialsBRAINS(fidIn,tfmIn,fidOut):
   if ret:
    exit()
 
+def transformFiducialsSlicer(fiducialsIn, transform, fiducialsOut):
+    ### done in Slicer!
+    fidLogic = slicer.modules.markups.logic()
+    tfmLogic = slicer.modules.transforms.logic()
+    fidId = fidLogic.LoadMarkupsFiducials(fiducialsIn, 'na')
+    print 'Fiducials loaded:', fidId
+    fid = slicer.mrmlScene.GetNodeByID(fidId)
+    tfm = tfmLogic.AddTransform(transform, slicer.mrmlScene)
+    fid.SetAndObserveTransformNodeID(tfm.GetID())
+    tfmLogic.hardenTransform(fid)
+
+    fidStorage = fid.GetStorageNode()
+    fidStorage.SetFileName(fiducialsOut)
+    fidStorage.WriteData(fid)
+
 def transformFiducials(needleImageIds,ResDir,case):
 
     for nid in needleImageIds:
@@ -217,7 +232,9 @@ def transformFiducials(needleImageIds,ResDir,case):
           resampled = centroidDir+'/Case'+str(case)+'/'+str(nidStr)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
           fidList = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
 
-          transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
+          #transformFiducialsBRAINS(fidIn=fidList,tfmIn=bsplineTfm,fidOut=resampled)
+          print "fidList = "+str(fidList)
+          transformFiducialsSlicer(fidList,bsplineTfm,resampled)
 
           i+=1
 
@@ -273,8 +290,8 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
                       '/'+str(nid)+'-BSplineRegistered-'+str(listOfTargetsToBeTransformed[i])+'.fcsv'
 
           initialPosition = ReadInitialFiducial('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case'+str(case)+'/'+str(listOfTargetsToBeTransformed[i])+'.fcsv')
-
-          nidPosition = ReadFiducial(resampled)
+          #print "now reading fiducial "
+          nidPosition = ReadFiducial_fixed(resampled)
 
           #print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
           #print 'nidPosition[0]'+str(nidPosition[0])
@@ -283,7 +300,6 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           summary.append([case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]])
           f.write(str(case)+','+str(nid)+','+str(nidTime-initialTime)+','+str(nidPosition[0]-initialPosition[0])+','+str(nidPosition[1]-initialPosition[1])+','+str(nidPosition[2]-initialPosition[2])+','+'\n')
 
-
           x = nidPosition[0]-initialPosition[0]
           y = nidPosition[1]-initialPosition[1]
           z = nidPosition[2]-initialPosition[2]
@@ -291,7 +307,6 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
           appendToExcelColumn(listOfTargetsToBeTransformed[i],x,y,z,list_of_columns)
 
           #print nidTime-initialTime
-          print
 
 
         #f.write("\n"+"_____________________________________")
@@ -316,7 +331,6 @@ def createMotionSummary(case,motionDir,centroidDir,needleImageIDs,listOfColumns)
         #print avgZ
 
         #f.write("\n"+str(case)+', '+str(avgX)+', '+str(avgY) + ', ' +str(avgZ))
-
 
 def getNameOfList(index):
 
@@ -487,6 +501,29 @@ def ReadInitialFiducial(dir):
     l = f.read()
     i = l.split(',')
     return [float(i[1]),float(i[2]),float(i[3])]
+
+
+def ReadFiducial_fixed(fname):
+    f = open(fname, 'r')
+    # ignore line 1-8
+    l = f.readlines()[3:]
+    # print 'l = ',str(l)
+    number_of_fids = len(l)
+    # print ('amount of fids : '+str(number_of_fids))
+    import string
+    splitted = string.split(str(l), ',')
+    #print 'splitted = '+str(splitted)
+    #print splitted[1]
+    #print splitted[2]
+    #print splitted[3]
+    """
+    chunks=[splitted[x:x+6] for x in xrange(0, number_of_fids*6, 6)]
+    fiducials=[]
+    for i in range(0,1):
+        # print ('fiducialPoint = '+str(chunks[i][1:4]))
+        fiducials.append(chunks[i][1:4])
+    """
+    return [float(splitted[1]), float(splitted[2]), float(splitted[3])]
 
 def ReadFiducial(fname):
 
@@ -2105,6 +2142,8 @@ numberOfCases = 300
 listOfCaseIDs = []
 listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 
+#listOfCaseIDs = [295,298]
+
 # skip those
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
 
@@ -2117,13 +2156,15 @@ ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,1
 # substract from list of cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
+
+#alreadyGotThose = range(0,151)
 #listOfCaseIDs=list(set(listOfCaseIDs) - set(alreadyGotThose))
 
 
 createFolders()
 list_of_columns = createListOfColumns()
 
-#listOfCaseIDs = [11,12]
+#listOfCaseIDs = [11]
 
 for case in listOfCaseIDs:
     print case
@@ -2232,34 +2273,80 @@ printListOfColumns(list_of_columns)
 
 #plotMotionFromSingleCaseOverTime(listOfCaseIDs)
 
+
+
+
+# plot motion_summary chart
+
+listOfTargetsToBeTransformed = ['centroid_apex',
+                                'centroid_base',
+                                'centroid_label',
+                                'midgland_inferior',
+                                'midgland_left',
+                                'midgland_right',
+                                'midgland_superior']
+
+# print 'DIR = '+str(motionDir+'/motionsummary_'+str(listOfTargetsToBeTransformed[i])+'.txt')
+
+fileDir = "/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/motion/motion_summary"
+f = open(fileDir, 'w')
+f.write('index,caseId,needleId,initialTime,scanTime,timeSinceStartSec,timeSinceStartMin,prostate.apex.x,prostate.apex.y,prostate.apex.z,prostate.base.x,prostate.base.y,prostate.base.z,prostate.centroid.x,prostate.centroid.y,prostate.centroid.z,prostate.inferior.x,prostate.inferior.y,prostate.inferior.z,prostate.left.x,prostate.left.y,prostate.left.z,prostate.right.x,prostate.right.y,prostate.right.z,prostate.superior.x,prostate.superior.y,prostate.superior.z,pelvis.centroid.x,pelvis.centroid.y,pelvis.centroid.z')
+
+
+# write index
+
+# write caseID
+
+# write needle ID
+
+# write inital time
+
+# write scanTime
+
+# write timeSinceStartSec & timeSinceStartMin
+
+# write motion
+
 """
-list_of_times_in_minutes = []
-
-xPositions = []
-yPositions = []
-zPositions = []
-
-for case in listOfCaseIDs:
-
-      for nid in getNeedleImageIDs(getCaseDir(case)):
-        list_of_times_in_minutes.append(round((float(ReadNeedleTime(case,nid)-ReadInitialTime(case))/float(60.0)),4))
-
-      x,y,z = getXYZMotion_with_compensation(case,'centroid_label')
-
-      for i in x:
-       xPositions.append(round(i,4))
-      for i in y:
-       yPositions.append(round(i,4))
-      for i in z:
-       zPositions.append(round(i,4))
+for i in targets:
+dir = motionDir + '/motionsummary_' + str(listOfTargetsToBeTransformed[i]) + '.txt'
+cmd = 'touch ' + str(dir)
+# print dir
+os.system(cmd)
 
 
+# f.write('case,nid,nidTime-initialTime,nidPosition[0]-initialPosition[0],nidPosition[1]-initialPosition[1],nidPosition[2]-initialPosition[2]')
+summary = []
+for nid in needleImageIds:
+  nidTime = ReadNeedleTime(case, nid)
+  initialTime = ReadInitialTime(case)
 
-print list_of_times_in_minutes
-print '_____________________________________________________________________________________________________'
-print xPositions
-print '_____________________________________________________________________________________________________'
-print yPositions
-print '_____________________________________________________________________________________________________'
-print zPositions
+  # print nidTime
+
+  resampled = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed/Case' + str(case) + \
+              '/' + str(nid) + '-BSplineRegistered-' + str(listOfTargetsToBeTransformed[i]) + '.fcsv'
+
+  initialPosition = ReadInitialFiducial(
+      '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets/Case' + str(case) + '/' + str(
+          listOfTargetsToBeTransformed[i]) + '.fcsv')
+  print "now reading fiducial "
+  nidPosition = ReadFiducial_fixed(resampled)
+
+  # print case,',',nid,',',nidTime-initialTime,',',abs(nidPosition[0]-initialPosition[0]),', ',abs(nidPosition[1]-initialPosition[1]),', ',abs(nidPosition[2]-initialPosition[2])
+  # print 'nidPosition[0]'+str(nidPosition[0])
+  # print 'initialPosition[0]'+str(initialPosition[0])
+
+  summary.append(
+      [case, nid, nidTime - initialTime, nidPosition[0] - initialPosition[0], nidPosition[1] - initialPosition[1],
+       nidPosition[2] - initialPosition[2]])
+  f.write(str(case) + ',' + str(nid) + ',' + str(nidTime - initialTime) + ',' + str(
+      nidPosition[0] - initialPosition[0]) + ',' + str(nidPosition[1] - initialPosition[1]) + ',' + str(
+      nidPosition[2] - initialPosition[2]) + ',' + '\n')
+
+  x = nidPosition[0] - initialPosition[0]
+  y = nidPosition[1] - initialPosition[1]
+  z = nidPosition[2] - initialPosition[2]
+
+  appendToExcelColumn(listOfTargetsToBeTransformed[i], x, y, z, list_of_columns)
+
 """
