@@ -118,7 +118,7 @@ import sys, glob, string, os, re
 # for each case key, sort the files
 # take pairs that have the same needle id, coombine into gif
 
-inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots123/'
+inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots/'
 outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs/'
 
 inputFiles = glob.glob(inputDir+'/*png')

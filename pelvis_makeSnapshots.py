@@ -43,11 +43,25 @@ def getListOfCaseIDs(numberOfCases):
 
   return listOfCaseIDs
 
-listOfCaseIDs = getListOfCaseIDs(300)
+# get list of cases
+numberOfCases = 300
+listOfCaseIDs = []
+listOfCaseIDs = getListOfCaseIDs(numberOfCases)
+
+#listOfCaseIDs = [295,298]
+
+# skip those
 ignoreCaseIDs = [4,5,7,8,52,60,69,72,101,142]
+
+pelvisRegProbs = [18,23,28,29,32,33,40,42,43,46,47,66,67,76,80,81,83,91,97,99,107,108,112,114,115,
+                  118,119,127,146,150,151,153,164,168,185,186,189,202,214,219,228,245,246,253,256,
+                  262,268,272,273,290,295]
+
+ignoreCaseIDsFromLackOfData = [10,49,80,81,117,121,123,134,135,137,138,141,146,150,177,212,213,218,227,241,254,255,266,289,290]
+
+# substract from list of cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
-#alreadyGotThose = range(0,52)
-#listOfCaseIDs = list(set(listOfCaseIDs) - set(alreadyGotThose))
+listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
 
 
 def getNeedleImageIDs(IntraDir):
@@ -72,7 +86,7 @@ def getNeedleImageIDs(IntraDir):
 # - snapshot path that is set in VisAIRe.py !
 
 
-
+"""
 for case in listOfCaseIDs:
 
     print 'NEW CASE ******************************************************'
@@ -82,14 +96,14 @@ for case in listOfCaseIDs:
     #slicer.modules.VisAIReInstance.__init__(parent)
 
     # get configdir
-    configdir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pelvis/Case'+str(case)+'_VisAIRe.ini'
+    configdir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs/Case'+str(case)+'_VisAIRe.ini'
 
     # open VisAIRe with config dir
-    slicer.modules.VisAIReWidget.initFromFile('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pelvis/Case'+str(case)+'_VisAIRe.ini')
+    slicer.modules.VisAIReWidget.initFromFile('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs/Case'+str(case)+'_VisAIRe.ini')
 
     # hit "make snapshots"
     slicer.modules.VisAIReWidget.onMakeSnapshots()
-
+"""
 
 import sys, glob, string, os, re
 
@@ -97,8 +111,8 @@ import sys, glob, string, os, re
 # for each case key, sort the files
 # take pairs that have the same needle id, coombine into gif
 
-inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots_Pelvis/'
-outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs_Pelivs'
+inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots_Pelvis_save/'
+outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs_Pelvis'
 
 inputFiles = glob.glob(inputDir+'/*png')
 
