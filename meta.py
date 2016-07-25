@@ -2164,7 +2164,7 @@ listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
 createFolders()
 list_of_columns = createListOfColumns()
 
-#listOfCaseIDs = [11]
+listOfCaseIDs = [11]
 
 for case in listOfCaseIDs:
     print case
@@ -2196,7 +2196,7 @@ for case in listOfCaseIDs:
   # 1. registerCase.py
   cmd = ('python registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   #print ('about to run : '+cmd)
-  #os.system(cmd)
+  os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))

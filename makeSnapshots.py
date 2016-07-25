@@ -99,8 +99,8 @@ for case in listOfCaseIDs:
     print 'NEW CASE ******************************************************'
     print 'CASE : '+str(case)
     # initialize widget
-    #parent = slicer
-    #slicer.modules.VisAIReInstance.__init__(parent)
+        #parent = slicer
+        #slicer.modules.VisAIReInstance.__init__(parent)
 
     # get configdir
     configdir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs/Case'+str(case)+'_VisAIRe.ini'

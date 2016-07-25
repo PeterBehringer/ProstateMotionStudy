@@ -211,12 +211,16 @@ for nid in needleImageIds:
     startTime = time()
     # rigid
     print IntraDir
-    initTfm = IntraDir+nidStr+'-init.h5'
 
-    if os.path.isfile(initTfm):
-       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
-    else:
-       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
+    #initTfm = IntraDir+nidStr+'-init.h5'
+
+    #if os.path.isfile(initTfm):
+    #   BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
+    #else:
+    #   BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
+
+    BFRegister(fixed=fixedImage, moving=movingImage, fixedMask=fixedMask, rigidTfm=rigidTfm, log=log,initialTfm=latestRigidTfm)
+
 
     # create bigger mask
     #dilateMask(fixedMask,fixedMask_dilated)
@@ -234,14 +238,17 @@ for nid in needleImageIds:
     bsplineTfm = RegDir+'/'+nidStr+'-IntraIntra-BSpline-Attempt2.h5'
     rigidTfm = RegDir+'/'+nidStr+'-IntraIntra-Rigid-Attempt2.h5'
     affineTfm = RegDir+'/'+nidStr+'-IntraIntra-Affine-Attempt2.h5'
-    initTfm = IntraDir+nidStr+'-init.h5'
+    #initTfm = IntraDir+nidStr+'-init.h5'
     startTime = time()
     # rigid
     print ('fixed Mask = '+fixedMask)
-    if os.path.isfile(initTfm):
-       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
-    else:
-       BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
+    #if os.path.isfile(initTfm):
+    #   BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm,initTfm=initTfm)
+    #else:
+    #   BFRegister(fixed=fixedImage,moving=movingImage,fixedMask=fixedMask,rigidTfm=rigidTfm,log=log,initialTfm=latestRigidTfm)
+
+    BFRegister(fixed=fixedImage, moving=movingImage, fixedMask=fixedMask, rigidTfm=rigidTfm, log=log,initialTfm=latestRigidTfm)
+
     # affine
     # BFRegister(fixed=fixedImage,moving=movingImage,movingMask=movingMask,fixedMask=fixedMask,affineTfm=affineTfm,log=log)
     # bspline
@@ -254,10 +261,13 @@ for nid in needleImageIds:
 
   print ('DEBUG: latestRigidTfm')
   print rigidTfm
-  if os.path.isfile(initTfm):
-    latestRigidTfm = initTfm
-  else:
-    latestRigidTfm = rigidTfm
+  #if os.path.isfile(initTfm):
+  #  latestRigidTfm = initTfm
+  #else:
+  #  latestRigidTfm = rigidTfm
+
+  latestRigidTfm = rigidTfm
+
   """
   success = success or IsBSplineTfmValid(bsplineTfm)
   if not success:

@@ -85,8 +85,47 @@ def getNeedleImageIDs(IntraDir):
 # - VisAIRe is installed as a module and open
 # - snapshot path that is set in VisAIRe.py !
 
+listOfCaseIDs = [202]
 
-"""
+listOfCaseIDs = [18,23
+,28
+,32
+,33
+,40
+,42
+,43
+,46
+,47
+,66
+,67
+,76
+,83
+,91
+,97
+,107
+,108
+,112
+,114
+,115
+,151
+,153
+,164
+,168
+,186
+,189
+,202
+,214
+,219
+,228
+,246
+,253
+,262
+,268
+,272
+,273,295]
+
+print listOfCaseIDs
+
 for case in listOfCaseIDs:
 
     print 'NEW CASE ******************************************************'
@@ -99,19 +138,18 @@ for case in listOfCaseIDs:
     configdir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs/Case'+str(case)+'_VisAIRe.ini'
 
     # open VisAIRe with config dir
-    slicer.modules.VisAIReWidget.initFromFile('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs/Case'+str(case)+'_VisAIRe.ini')
+    slicer.modules.VisAIReWidget.initFromFile('/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Configs_Pelvis/Case'+str(case)+'_VisAIRe.ini')
 
     # hit "make snapshots"
     slicer.modules.VisAIReWidget.onMakeSnapshots()
 """
-
 import sys, glob, string, os, re
 
 # read all snapshot files
 # for each case key, sort the files
 # take pairs that have the same needle id, coombine into gif
 
-inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/snapshots_Pelvis_save/'
+inputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_snapshots_Pelvis/'
 outputDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/GIFs_Pelvis'
 
 inputFiles = glob.glob(inputDir+'/*png')
@@ -202,3 +240,4 @@ for case in listOfCaseIDs:
 
 
   print 'CASE '+str(case)+' THROUGH!'
+"""

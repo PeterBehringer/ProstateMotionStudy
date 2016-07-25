@@ -44,22 +44,22 @@ def getCaseDir(case):
 def getRegDir(case):
 
     if case < 10:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case00'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_PelvisCase00'+str(case)+'/IntraopImages/'
     elif 9 < case < 100:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case0'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/Case0'+str(case)+'/IntraopImages/'
     elif 99 < case:
-        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case'+str(case)+'/IntraopImages/'
+        regDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/Case'+str(case)+'/IntraopImages/'
 
     return regDir
 
 def getTransformDir(case):
 
     if case < 10:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case00'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case0'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/Case0'+str(case)
     elif 99 < case:
-        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/Case'+str(case)
+        transformDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/Case'+str(case)
 
     return transformDir
 
@@ -103,22 +103,22 @@ def getListOfCaseIDs(numberOfCases):
 def getTempDir(case):
 
     if case < 10:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case00'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Masks_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case0'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Masks_Pelvis/Case0'+str(case)
     elif 99 < case:
-        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis/Case'+str(case)
+        tempDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Masks_Pelvis/Case'+str(case)
 
     return tempDir
 
 def getResDir(case):
 
     if case < 10:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case00'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Images_Pelvis/Case00'+str(case)
     elif 9 < case < 100:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case0'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Images_Pelvis/Case0'+str(case)
     elif 99 < case:
-        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Images_Pelvis/Case'+str(case)
+        ResDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Images_Pelvis/Case'+str(case)
 
     return ResDir
 
@@ -598,11 +598,11 @@ resamplingCmd = "/Applications/Slicer.app/Contents/lib/Slicer-4.4/cli-modules/BR
 
 # dirs
 CaseDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Cases003-298_data/'
-RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Transforms_Pelvis/'
-TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Masks_Pelvis'
+RegDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Transforms_Pelvis/'
+TempDir='/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_Masks_Pelvis'
 latestRigidTfm = '/Users/peterbehringer/MyStudies/InitialTransforms/Identity.h5'
 centroidDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/targets_transformed_Pelvis'
-configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/configs_Pelvis'
+configDir = '/Users/peterbehringer/MyStudies/2015-ProstateMotionStudy/Alireza_configs_Pelvis'
 
 numberOfCases = 300
 listOfCaseIDs = []
@@ -644,6 +644,8 @@ list_of_columns = createListOfColumns()
 
 # register case
 
+listOfCaseIDs = [11]
+
 for case in listOfCaseIDs:
   #print 'execute meta.py for case '+str(case)
 
@@ -662,7 +664,7 @@ for case in listOfCaseIDs:
   # 1. registerCase.py
   cmd = ('python pelvis_registerCase.py '+str(case)+' '+str(caseDir)+' '+str(regDir)+' '+str(tempDir))
   #print ('about to run : '+cmd)
-  #os.system(cmd)
+  os.system(cmd)
 
   # 2. resampleCase.py
   cmd = ('python pelvis_resampleCase.py '+str(case)+' '+str(regDir)+' '+str(IntraDir)+' '+str(resDir))
@@ -673,7 +675,7 @@ for case in listOfCaseIDs:
   #transformFiducialsPelvis(needleImageIds,resDir,case)
 
   # 5. create Config for verification and snapshots
-  #makeConfig(case,caseDir,needleImageIds,regDir,resDir)
+  makeConfig(case,caseDir,needleImageIds,regDir,resDir)
 
   # 6. createMotionSummary
   #createMotionSummary(case,motionDir,centroidDir,needleImageIds,list_of_columns)

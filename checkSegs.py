@@ -128,24 +128,18 @@ listOfCaseIDs = getListOfCaseIDs(numberOfCases)
 # ignore cases
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDs))
 
-print listOfCaseIDs
+#print listOfCaseIDs
 
 listOfCaseIDs=list(set(listOfCaseIDs) - set(ignoreCaseIDsFromLackOfData))
 
-print listOfCaseIDs
+#print listOfCaseIDs
 
 #listOfCaseIDs = [214]
 
 numberOfCases = 0
 
-for case in listOfCaseIDs:
-    print case
-
-count3=0
 
 for case in listOfCaseIDs:
-
-
 
     #print 'case = '+str(case)
     tag = 0
@@ -153,6 +147,15 @@ for case in listOfCaseIDs:
     nids =  getNeedleImageIDs(caseDir)
 
 
+    # check for manual initial transforms for pelvis registration
+    for nid in nids:
+      nidStr = str(nid)
+      initTfm = caseDir + nidStr + '-init.h5'
+
+      if os.path.isfile(initTfm):
+          #print 'case '+str(case)+' needed to be initialized manually'
+          print case
+          break
     """
     #### CHECK IF NEEDLE SERIES IS SHORT AND COVER-PROSTATE IMAGE IS MISSING
 
@@ -192,7 +195,7 @@ for case in listOfCaseIDs:
 
     #### COUNT !
     count2 = 0
-
+    """
 
     for needleImgs in nids:
         count2 += 1
@@ -205,7 +208,7 @@ for case in listOfCaseIDs:
         excel_column_NEEDLEIMAGE.append(needleImgs)
 
     number_of_needleImagesList.append(count2)
-
+    """
     #print count2
 
     ####
@@ -222,11 +225,11 @@ for case in listOfCaseIDs:
 
 
 
-    fileList = os.listdir(caseDir)
-    for file in fileList:
-        if 'Pelvis-Pelvis' in file:
+    #fileList = os.listdir(caseDir)
+    #for file in fileList:
+    #    if 'Pelvis-Pelvis' in file:
             #print ('found pelvis pelvis file, its '+str(file))
-            os.remove(caseDir+'/'+str(file))
+    #        os.remove(caseDir+'/'+str(file))
     ####
 
 
@@ -328,262 +331,3 @@ print 'there are '+str(count3)+' needle images in total'
 
 print '____________________________________'
 print str(count3)+' manual segmentations were needed'
-
-
-a=[159
-,132
-,179
-,177
-,177
-,185
-,200
-,176
-,185
-,181
-,193
-,188
-,155
-,222
-,172
-,238
-,194
-,203
-,201
-,195
-,162
-,199.5
-,178
-,185
-,187
-,194
-,182
-,146
-,184
-,164
-,177
-,193
-,199
-,176
-,183
-,222
-,159
-,183
-,176
-,206
-,180
-,174
-,216
-,238
-,185
-,220
-,174
-,168
-,229
-,156
-,202
-,248
-,162
-,148
-,208
-,185
-,200
-,198
-,156
-,168
-,196
-,196
-,194.9997929
-,179.9998088
-,199.9997876
-,197.9997897
-,179.9998088
-,177.999811
-,155.9998343
-,234.9997504
-,194.9997929
-,199.9997876
-,169.9998195
-,184.9998035
-,159.9998301
-,182.9998056
-,152
-,172
-,168
-,182
-,206
-,224.999108
-,206.9997802
-,164.9998248
-,271
-,179
-,219.9997664
-,169.9998195
-,204.9997823
-,171.9998173
-,164.9998248
-,179.9998088
-,277.9997048
-,199.9997876
-,194.9997929
-,164.9998248
-,179.9998088
-,174.9998141
-,179.9998088
-,224.999761
-,239.9997451
-,191.9997961
-,199.9997876
-,179.9998088
-,176
-,204.9997823
-,189.9997982
-,193.999794
-,156.9998333
-,204.9997823
-,159.9998301
-,189.9997982
-,219.9997664
-,199.9997876
-,230.0080046
-,189.9941516
-,181.991381
-,156.9998333
-,212.9993613
-,200.0031264
-,209.990055
-,219.9990298
-,178.0010188
-,216.9997695
-,217.9994395
-,196.9997908
-,169.9998195
-,194.9997929
-,189.9997982
-,173
-,160
-,255
-,174
-,200
-,226
-,284
-,220
-,165
-,218
-,170
-,150
-,212
-,144
-,232
-,147
-,385
-,168
-,203
-,180
-,228
-,183
-,197
-,196
-,169
-,142
-,156
-,190
-,182
-,165
-,186
-,180
-,203
-,242
-,180
-,240
-,163
-,243
-,179
-,201
-,161
-,177
-,195
-,188
-,179
-,171
-,202
-,193
-,227
-,179
-,206
-,228
-,213
-,163
-,170
-,189
-,145
-,218
-,182
-,262
-,242
-,167
-,185
-,187
-,215
-,183
-,210
-,167
-,204
-,166
-,160
-,218
-,158
-,199
-,254
-,175
-,116
-,167
-,282
-,175
-,200
-,174
-,160
-,195
-,194
-,225
-,210
-,170
-,225
-,185
-,175
-,175
-,152
-,192
-,180
-,170
-,156
-,166
-,200
-,238
-,183
-,177
-,185
-,160
-,227
-,228
-,193
-,190
-,215
-,159
-,229
-,168
-,185
-,182
-,194
-,257
-,242
-,230
-,180
-,203
-,183
-,220
-,145
-,180
-,188
-,212]
-
-print a
